@@ -1,4 +1,4 @@
-package com.example.doctsys.ui.screen
+package com.example.doctsys.ui.screen.enterToApp
 
 import android.annotation.SuppressLint
 import android.util.Patterns.EMAIL_ADDRESS

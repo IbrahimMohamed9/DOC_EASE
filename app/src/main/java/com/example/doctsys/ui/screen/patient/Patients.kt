@@ -1,4 +1,4 @@
-package com.example.doctsys.ui.screen
+package com.example.doctsys.ui.screen.patient
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold

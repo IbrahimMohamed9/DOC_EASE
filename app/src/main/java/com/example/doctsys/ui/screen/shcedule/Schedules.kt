@@ -1,4 +1,4 @@
-package com.example.doctsys.ui.screen
+package com.example.doctsys.ui.screen.shcedule
 
 import android.annotation.SuppressLint
 import android.os.Build
