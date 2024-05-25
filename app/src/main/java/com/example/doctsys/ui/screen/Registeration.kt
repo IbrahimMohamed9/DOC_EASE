@@ -1,6 +1,7 @@
 package com.example.doctsys.ui.screen
 
 import android.annotation.SuppressLint
+import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,45 +36,63 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.doctsys.R
+import com.example.doctsys.ui.screen.navigation.DocBottomNavBar
+import com.example.doctsys.ui.screen.navigation.DoctorAppBar
 import com.example.doctsys.ui.screen.navigation.NavigationDestination
 
-object LoginDestination : NavigationDestination {
-    override val route = "login"
-    override val title = "Login"
+object RegistrationDestination : NavigationDestination {
+    override val route = "register"
+    override val title = "Register"
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginScreenWithTopBar(
-    navigateToRegister: () -> Unit,
+fun RegistrationScreenWithTopBar(
+    navigateToLogin: () -> Unit,
 //    navigateToProfilePage: (Int) -> Unit
 ) {
-    Scaffold {
-        LoginScreen(
-            navigateToRegister = navigateToRegister
+    Scaffold(
+        topBar = {
+            DoctorAppBar(
+                titleScreen = RegistrationDestination.title,
+                canNavigateBack = true
+            )
+        },
+//        bottomBar = {
+//            DocBottomNavBar()
+//        }
+    ) {
+        RegistrationScreen(
+            navigateToLogin = navigateToLogin
 //            , navigateToProfilePage = navigateToProfilePage
         )
     }
 }
 
 @Composable
-fun LoginScreen(
-    navigateToRegister: () -> Unit,
-//    navigateToProfilePage:(Int)->Unit
+fun RegistrationScreen(
+    navigateToLogin: () -> Unit,
+//    navigateToProfilePage: (Int) -> Unit
 ) {
+    var name by remember { mutableStateOf("") }
+    var surname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordRepeat by remember { mutableStateOf("") }
 
     var showPassword by remember { mutableStateOf(false) }
+    var checkPassword by remember { mutableStateOf(true) }
     var checkEmail by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .wrapContentWidth()
+            .padding(vertical = 50.dp)
             .verticalScroll(
                 rememberScrollState()
             ),
@@ -82,7 +101,7 @@ fun LoginScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.doctor),
-            contentDescription = "Doctor image",
+            contentDescription = "",
             modifier = Modifier.size(width = 100.dp, height = 100.dp)
         )
 
@@ -93,6 +112,46 @@ fun LoginScreen(
             fontSize = 30.sp,
             fontFamily = FontFamily.Cursive,
             color = Color.Blue
+        )
+
+        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            enabled = true,
+            label = {
+                Text(text = "name")
+            },
+            placeholder = {
+                Text(text = "name")
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            )
+
+        )
+
+
+        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+
+        TextField(
+            value = surname,
+            onValueChange = { surname = it },
+            enabled = true,
+            label = {
+                Text(text = "surname")
+            },
+            placeholder = {
+                Text(text = "surname")
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            )
         )
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
@@ -127,6 +186,7 @@ fun LoginScreen(
             } else {
                 PasswordVisualTransformation()
             },
+            isError = !checkPassword,
             trailingIcon = {
                 Icon(
                     painter = if (showPassword) {
@@ -134,33 +194,65 @@ fun LoginScreen(
                     } else {
                         painterResource(id = R.drawable.baseline_visibility_off_24)
                     },
-                    contentDescription = "Visibility Icon",
+                    contentDescription = "",
                     modifier = Modifier.clickable(onClick = { showPassword = !showPassword })
                 )
             },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            )
+        )
+
+        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+
+        TextField(
+            value = passwordRepeat,
+            onValueChange = { passwordRepeat = it },
+            label = {
+                Text(text = "repeat password")
+            },
+            visualTransformation = PasswordVisualTransformation(),
+            isError = !checkPassword,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            )
         )
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 5.dp))
 
         TextButton(
-            onClick = { navigateToRegister() },
+            onClick = {
+                navigateToLogin()
+            },
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text(text = "Do not have an account")
+            Text(text = "Have an account?")
         }
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         Button(onClick = {
+            checkPassword = password == passwordRepeat
             checkEmail = !checkEmail(email)
         }) {
             Text(
-                text = "Login",
+                text = "Registration",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Light,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp)
             )
         }
-
     }
+}
+
+fun checkEmail(email: String): Boolean {
+    return EMAIL_ADDRESS.matcher(email).matches()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegistrationScreenPreview() {
+    //RegistrationScreen()
 }
