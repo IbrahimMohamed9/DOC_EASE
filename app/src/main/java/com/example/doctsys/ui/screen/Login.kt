@@ -47,14 +47,13 @@ object LoginDestination : NavigationDestination {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginScreenWithTopBar(
-    navigateToRegister: () -> Unit,
-//    navigateToProfilePage: (Int) -> Unit
+fun LoginScreenNavigation(
+    navigateToProfilePage: (Int) -> Unit,
+    navigateToRegister: () -> Unit
 ) {
     Scaffold {
         LoginScreen(
-            navigateToRegister = navigateToRegister
-//            , navigateToProfilePage = navigateToProfilePage
+            navigateToRegister = navigateToRegister, navigateToProfilePage = navigateToProfilePage
         )
     }
 }
@@ -62,7 +61,7 @@ fun LoginScreenWithTopBar(
 @Composable
 fun LoginScreen(
     navigateToRegister: () -> Unit,
-//    navigateToProfilePage:(Int)->Unit
+    navigateToProfilePage: (Int) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -153,6 +152,9 @@ fun LoginScreen(
 
         Button(onClick = {
             checkEmail = !checkEmail(email)
+            if (checkEmail) {
+                navigateToProfilePage(0)
+            }
         }) {
             Text(
                 text = "Login",

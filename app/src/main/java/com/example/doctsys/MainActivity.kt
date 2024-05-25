@@ -20,8 +20,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    LoginScreen()
-//                    RegistrationScreen()
                     DocNavHost(navController = rememberNavController())
                 }
             }

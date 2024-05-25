@@ -40,8 +40,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.doctsys.R
-import com.example.doctsys.ui.screen.navigation.DocBottomNavBar
-import com.example.doctsys.ui.screen.navigation.TopAppBar
 import com.example.doctsys.ui.screen.navigation.NavigationDestination
 
 object RegistrationDestination : NavigationDestination {
@@ -51,9 +49,9 @@ object RegistrationDestination : NavigationDestination {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegistrationScreenWithTopBar(
+fun RegistrationScreenNavigation(
     navigateToLogin: () -> Unit,
-//    navigateToProfilePage: (Int) -> Unit
+    navigateToProfilePage: (Int) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -67,8 +65,7 @@ fun RegistrationScreenWithTopBar(
 //        }
     ) {
         RegistrationScreen(
-            navigateToLogin = navigateToLogin
-//            , navigateToProfilePage = navigateToProfilePage
+            navigateToLogin = navigateToLogin, navigateToProfilePage = navigateToProfilePage
         )
     }
 }
@@ -76,7 +73,7 @@ fun RegistrationScreenWithTopBar(
 @Composable
 fun RegistrationScreen(
     navigateToLogin: () -> Unit,
-//    navigateToProfilePage: (Int) -> Unit
+    navigateToProfilePage: (Int) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
@@ -236,6 +233,9 @@ fun RegistrationScreen(
         Button(onClick = {
             checkPassword = password == passwordRepeat
             checkEmail = !checkEmail(email)
+            if (checkPassword && checkEmail) {
+                navigateToProfilePage(0)
+            }
         }) {
             Text(
                 text = "Registration",

@@ -14,11 +14,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.doctsys.R
 
 @Composable
-fun DocBottomNavBar() {
+fun DocBottomNavBar(
+    navigateToProfile: (Int)->Unit,
+    navigateToSchedules: ()->Unit,
+    navigateToPatients: ()->Unit,
+    profileId: Int
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -27,7 +33,7 @@ fun DocBottomNavBar() {
         Row(
             modifier = Modifier.padding(horizontal = 50.dp)
         ) {
-            IconButton(onClick = {/* TODO */ }) {
+            IconButton(onClick = {navigateToProfile(profileId) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.toppng_com_file_svg_profile_icon_vector_980x980),
                     contentDescription = "profile Icon",
@@ -37,7 +43,7 @@ fun DocBottomNavBar() {
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = {/* TODO */ }) {
+            IconButton(onClick = {navigateToSchedules() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.daily_schedule_icon),
                     contentDescription = "schedule Icon",
@@ -47,7 +53,7 @@ fun DocBottomNavBar() {
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = {/* TODO */ }) {
+            IconButton(onClick = {navigateToPatients() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.patient_hospital_stretcher_icon),
                     contentDescription = "patients Icon",
@@ -60,3 +66,9 @@ fun DocBottomNavBar() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun DocBottomNavBarPreview() {
+//    TopAppBar(titleScreen = "test", canNavigateBack = true, {})
+    DocBottomNavBar({},{},{}, 1)
+}
