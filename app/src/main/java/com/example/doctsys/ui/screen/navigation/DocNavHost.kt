@@ -25,7 +25,7 @@ fun DocNavHost(
     navController: NavHostController
 ) {
     // TODO ensure this is login
-    NavHost(navController = navController, startDestination = SchedulesDestination.route) {
+    NavHost(navController = navController, startDestination = PatientsDestination.route) {
         composable(route = LoginDestination.route) {
             LoginScreenNavigation(
                 navigateToRegister = { navController.navigate(RegistrationDestination.route) },

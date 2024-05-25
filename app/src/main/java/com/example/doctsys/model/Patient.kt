@@ -8,6 +8,5 @@ data class Patient(
     val DOB: String, //date of birth
     val phoneNumber: Number,
     val email: String,
-    val disease: Disease,
     val description: String
 )

@@ -82,7 +82,7 @@ object SchedulesDestination : NavigationDestination {
 fun ScheduleScreenNavigation(
     navigateToProfile: (Int) -> Unit, navigateToPatients: () -> Unit, profileId: Int
 ) {
-    Scaffold(floatingActionButton = { SmallExample() }, bottomBar = {
+    Scaffold(floatingActionButton = { FloatingActionButtonFun() }, bottomBar = {
         DocBottomNavBar(
             navigateToProfile, { }, navigateToPatients, profileId
         )
@@ -201,7 +201,7 @@ fun ScheduleCard(schedule: Schedule) {
 }
 
 @Composable
-fun SmallExample() {
+fun FloatingActionButtonFun() {
     var showDialog by remember { mutableStateOf(false) }
 
     SmallFloatingActionButton(
@@ -213,12 +213,12 @@ fun SmallExample() {
     }
 
     if (showDialog) {
-        InputDialog(onDismiss = { showDialog = false })
+        ScheduleDialog(onDismiss = { showDialog = false })
     }
 }
 
 @Composable
-fun InputDialog(onDismiss: () -> Unit) {
+fun ScheduleDialog(onDismiss: () -> Unit) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -381,7 +381,7 @@ fun ScheduleScreenNavigationPreview() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun InputDialogPreview() {
+fun ScheduleDialogPreview() {
 
-    InputDialog({ })
+    ScheduleDialog({ })
 }
