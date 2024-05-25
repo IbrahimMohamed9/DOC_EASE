@@ -106,13 +106,13 @@ fun ProfileScreen() {
         ProfileImage()
         Spacer(modifier = Modifier.size(height = 30.dp, width = 0.dp))
 
-        field(title = "ID", content = id.toString())
+        Field(title = "ID", content = id.toString())
 
         Spacer(modifier = Modifier.height(10.dp))
-        field(title = "Name", content = "$name $surname")
+        Field(title = "Name", content = "$name $surname")
 
         Spacer(modifier = Modifier.height(10.dp))
-        field(title = "Email", content = email)
+        Field(title = "Email", content = email)
 
         Spacer(modifier = Modifier.height(10.dp))
         Box(
@@ -121,13 +121,12 @@ fun ProfileScreen() {
             TextField(
                 modifier = Modifier
                     .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
-                    .fillMaxWidth(0.75f)
-                    .height(50.dp),
+                    .fillMaxWidth(0.75f),
                 value = dropDownItem,
 
                 onValueChange = {  },
                 readOnly = true,
-                label = {
+                placeholder = {
                     Text(text = "Medical Specialization")
                 },
                 colors = TextFieldDefaults.colors(
@@ -297,7 +296,7 @@ fun ProfileImage() {
 }
 
 @Composable
-fun field(title: String, content: String) {
+fun Field(title: String, content: String) {
     Column {
         Text(
             fontSize = 23.sp, fontWeight = FontWeight.Bold, text = title

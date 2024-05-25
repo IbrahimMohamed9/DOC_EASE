@@ -8,16 +8,16 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.doctsys.ui.screen.enterToApp.LoginDestination
-import com.example.doctsys.ui.screen.enterToApp.LoginScreenNavigation
-import com.example.doctsys.ui.screen.patient.PatientScreenNavigation
-import com.example.doctsys.ui.screen.patient.PatientsDestination
 import com.example.doctsys.ui.screen.ProfileDestination
 import com.example.doctsys.ui.screen.ProfileScreenNavigation
+import com.example.doctsys.ui.screen.enterToApp.LoginDestination
+import com.example.doctsys.ui.screen.enterToApp.LoginScreenNavigation
 import com.example.doctsys.ui.screen.enterToApp.RegistrationDestination
 import com.example.doctsys.ui.screen.enterToApp.RegistrationScreenNavigation
-import com.example.doctsys.ui.screen.shcedule.ScheduleScreenNavigation
-import com.example.doctsys.ui.screen.shcedule.SchedulesDestination
+import com.example.doctsys.ui.screen.PatientScreenNavigation
+import com.example.doctsys.ui.screen.PatientsDestination
+import com.example.doctsys.ui.screen.ScheduleScreenNavigation
+import com.example.doctsys.ui.screen.SchedulesDestination
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -25,7 +25,7 @@ fun DocNavHost(
     navController: NavHostController
 ) {
     // TODO ensure this is login
-    NavHost(navController = navController, startDestination = LoginDestination.route) {
+    NavHost(navController = navController, startDestination = SchedulesDestination.route) {
         composable(route = LoginDestination.route) {
             LoginScreenNavigation(
                 navigateToRegister = { navController.navigate(RegistrationDestination.route) },

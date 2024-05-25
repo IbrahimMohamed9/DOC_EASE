@@ -244,5 +244,5 @@ fun checkEmail(email: String): Boolean {
 @Preview(showBackground = true)
 @Composable
 fun RegistrationScreenPreview() {
-    //RegistrationScreen()
+    RegistrationScreen({},{})
 }
