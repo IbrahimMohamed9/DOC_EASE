@@ -53,17 +53,7 @@ fun RegistrationScreenNavigation(
     navigateToLogin: () -> Unit,
     navigateToProfilePage: (Int) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-//            TopAppBar(
-//                titleScreen = RegistrationDestination.title,
-//                canNavigateBack = true
-//            )
-        },
-//        bottomBar = {
-//            DocBottomNavBar()
-//        }
-    ) {
+    Scaffold {
         RegistrationScreen(
             navigateToLogin = navigateToLogin, navigateToProfilePage = navigateToProfilePage
         )

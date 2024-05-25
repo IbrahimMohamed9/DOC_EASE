@@ -21,7 +21,8 @@ import com.example.doctsys.ui.screen.ScheduleScreenNavigation
 fun DocNavHost(
     navController: NavHostController
 ) {
-    NavHost(navController = navController, startDestination = LoginDestination.route) {
+    // TODO ensure this is login
+    NavHost(navController = navController, startDestination = "${ProfileDestination.route}/${58}") {
         composable(route = LoginDestination.route) {
             LoginScreenNavigation(
                 navigateToRegister = { navController.navigate(RegistrationDestination.route) },
