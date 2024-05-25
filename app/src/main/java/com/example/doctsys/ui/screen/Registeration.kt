@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.doctsys.R
 import com.example.doctsys.ui.screen.navigation.DocBottomNavBar
-import com.example.doctsys.ui.screen.navigation.DoctorAppBar
+import com.example.doctsys.ui.screen.navigation.TopAppBar
 import com.example.doctsys.ui.screen.navigation.NavigationDestination
 
 object RegistrationDestination : NavigationDestination {
@@ -57,10 +57,10 @@ fun RegistrationScreenWithTopBar(
 ) {
     Scaffold(
         topBar = {
-            DoctorAppBar(
-                titleScreen = RegistrationDestination.title,
-                canNavigateBack = true
-            )
+//            TopAppBar(
+//                titleScreen = RegistrationDestination.title,
+//                canNavigateBack = true
+//            )
         },
 //        bottomBar = {
 //            DocBottomNavBar()
