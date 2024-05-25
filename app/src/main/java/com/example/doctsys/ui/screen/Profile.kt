@@ -233,7 +233,7 @@ fun ProfileImage() {
         }
     }
 
-    val rainbowColorsBrush = remember {
+    val colorsBrush = remember {
         Brush.sweepGradient(
             listOf(
                 Color(0xFFDFE988),
@@ -251,7 +251,7 @@ fun ProfileImage() {
     val modifier = Modifier
         .size(imageSize)
         .border(
-            BorderStroke(4.dp, rainbowColorsBrush), CircleShape
+            BorderStroke(5.dp, colorsBrush), CircleShape
         )
         .clip(CircleShape)
         .clickable {

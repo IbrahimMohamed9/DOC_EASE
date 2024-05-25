@@ -1,5 +1,7 @@
 package com.example.doctsys.ui.screen.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -14,15 +16,16 @@ import com.example.doctsys.ui.screen.ProfileDestination
 import com.example.doctsys.ui.screen.ProfileScreenNavigation
 import com.example.doctsys.ui.screen.RegistrationDestination
 import com.example.doctsys.ui.screen.RegistrationScreenNavigation
-import com.example.doctsys.ui.screen.SchedulesDestination
 import com.example.doctsys.ui.screen.ScheduleScreenNavigation
+import com.example.doctsys.ui.screen.SchedulesDestination
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DocNavHost(
     navController: NavHostController
 ) {
     // TODO ensure this is login
-    NavHost(navController = navController, startDestination = LoginDestination.route) {
+    NavHost(navController = navController, startDestination = SchedulesDestination.route) {
         composable(route = LoginDestination.route) {
             LoginScreenNavigation(
                 navigateToRegister = { navController.navigate(RegistrationDestination.route) },
