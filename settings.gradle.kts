@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "doctsys"
+rootProject.name = "DocEase"
 include(":app")
  

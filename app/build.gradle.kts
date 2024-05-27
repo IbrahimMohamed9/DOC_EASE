@@ -1,14 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+//    id("com.android.application")
+//    id("org.jetbrains.kotlin.android")
+//    id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.example.doctsys"
+    namespace = "com.example.DocEase"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.doctsys"
+        applicationId = "com.example.DocEase"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -65,6 +68,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+//    ksp("androidx.room:room-compiler:$room_version" )
 
     //VIEWMODEL
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
