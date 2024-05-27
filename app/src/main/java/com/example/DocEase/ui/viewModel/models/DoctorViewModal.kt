@@ -1,16 +1,21 @@
 package com.example.DocEase.ui.viewModel.models
 
+import com.example.DocEase.model.enums.MedicalSpecialization
 import com.example.DocEase.model.models.Doctors
+import com.example.DocEase.model.models.Gender
+import java.time.LocalDate
 
+val currentTime = LocalDate.now()
 data class DoctorsDetails(
     val doctorId: Int = 0,
     val name: String = "",
     val surname: String = "",
-    val DOJ: String = "", //date of join
+    val DOJ: String = "${currentTime.dayOfMonth}-${currentTime.monthValue}-${currentTime.year}", //date of join
     val DOB: String = "", //date of birth
     val phoneNumber: String = "",
     val email: String = "",
-    val gender: String = "",
+    val gender: Gender = Gender.FEMALE,
+    val medicalSpecialization: MedicalSpecialization = MedicalSpecialization.CARDIOLOGY,
     val password: String = "",
 )
 
@@ -30,7 +35,7 @@ fun DoctorsDetails.toDoctors(): Doctors = Doctors(
     email = email,
     gender = gender,
     password = password,
-
+    medicalSpecialization = medicalSpecialization,
     )
 
 fun Doctors.toDoctorsDetails() = DoctorsDetails(

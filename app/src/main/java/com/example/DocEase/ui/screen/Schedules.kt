@@ -123,7 +123,7 @@ fun SchedulesScreen(navigateToSchedule: (Int) -> Unit) {
         Spacer(modifier = Modifier.height(10.dp))
         if (openCalendar) {
             DatePickerDialog(onDismissRequest = { openCalendar = false }, confirmButton = {
-                Button(onClick = { showDate = true;openCalendar = false }) {
+                Button(onClick = { showDate = true; openCalendar = false }) {
                     Text(text = "Confirm")
                 }
             }) {

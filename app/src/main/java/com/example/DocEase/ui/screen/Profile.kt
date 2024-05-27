@@ -114,9 +114,7 @@ fun ProfileScreen() {
         Field(title = "Email", content = email)
 
         Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-        ) {
+        Box {
             TextField(
                 modifier = Modifier
                     .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))

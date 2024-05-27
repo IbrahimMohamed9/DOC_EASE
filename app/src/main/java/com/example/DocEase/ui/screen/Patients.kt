@@ -123,7 +123,7 @@ fun PatientCard(patient: Patients, index: Int, onClick: (Int) -> Unit) {
             modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 5.dp, end = 10.dp)
         ) {
             Image(
-                painter = painterResource(id = getPatientImage(patient.gender, index)),
+                painter = painterResource(id = getPatientImage(patient.gender.value, index)),
                 contentDescription = "schedule image",
                 modifier = Modifier
                     .size(100.dp)

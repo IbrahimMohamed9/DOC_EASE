@@ -82,8 +82,8 @@ fun LoginScreen(
     var checPassword by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
-    val uiState = viewModel.doctorsUiState
-    val detailsState = uiState.doctorsDetails
+    var uiState = viewModel.doctorsUiState
+    var detailsState = uiState.doctorsDetails
 
 
     Column(

@@ -18,6 +18,6 @@ data class Patients(
     @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "password") val password: String,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "gender") val gender: String,
+    @ColumnInfo(name = "gender") val gender: Gender,
     @ColumnInfo(name = "status") val status: PatientStatus
 )

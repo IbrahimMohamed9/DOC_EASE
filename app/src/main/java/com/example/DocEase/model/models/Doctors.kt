@@ -3,6 +3,7 @@ package com.example.DocEase.model.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.DocEase.model.enums.MedicalSpecialization
 
 @Entity(tableName = "doctors")
 data class Doctors(
@@ -16,5 +17,6 @@ data class Doctors(
     @ColumnInfo(name = "phoneNumber") val phoneNumber: String,
     @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "password") val password: String,
-    @ColumnInfo(name = "gender") val gender: String,
+    @ColumnInfo(name = "gender") val gender: Gender,
+    @ColumnInfo(name = "medicalSpecialization") val medicalSpecialization: MedicalSpecialization,
 )

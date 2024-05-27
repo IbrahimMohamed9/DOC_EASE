@@ -1,6 +1,7 @@
 package com.example.DocEase.model
 
 import com.example.DocEase.model.enums.PatientStatus
+import com.example.DocEase.model.models.Gender
 import com.example.DocEase.model.models.Patients
 
 object PatientList {
@@ -15,7 +16,7 @@ object PatientList {
             "john.doe@example.com",
             "Patient with mild symptoms.",
             "Male",
-            "", PatientStatus.STABLE,
+            Gender.MALE, PatientStatus.STABLE,
         ),
         Patients(
             2,
@@ -27,7 +28,7 @@ object PatientList {
             "jane.smith@example.com",
             "Patient recovering from surgery.",
             "Female",
-            "", PatientStatus.OBSERVATION,
+            Gender.MALE, PatientStatus.OBSERVATION,
         ),
         Patients(
             3,
@@ -39,7 +40,7 @@ object PatientList {
             "robert.brown@example.com",
             "Patient with chronic illness.",
             "Male",
-            "", PatientStatus.CRITICAL,
+            Gender.MALE, PatientStatus.CRITICAL,
         ),
         Patients(
             4,
@@ -51,7 +52,7 @@ object PatientList {
             "emily.jones@example.com",
             "Patient with high blood pressure.",
             "Female",
-            "", PatientStatus.OBSERVATION,
+            Gender.MALE, PatientStatus.OBSERVATION,
         ),
         Patients(
             5,
@@ -63,7 +64,7 @@ object PatientList {
             "michael.davis@example.com",
             "Patient with diabetes.",
             "Male",
-            "", PatientStatus.STABLE,
+            Gender.MALE, PatientStatus.STABLE,
         ),
         Patients(
             6,
@@ -75,7 +76,7 @@ object PatientList {
             "sarah.wilson@example.com",
             "Patient with allergy symptoms.",
             "Female",
-            "", PatientStatus.STABLE,
+            Gender.MALE, PatientStatus.STABLE,
         ),
         Patients(
             7,
@@ -87,7 +88,7 @@ object PatientList {
             "david.martinez@example.com",
             "Patient with heart condition.",
             "Male",
-            "", PatientStatus.CRITICAL,
+            Gender.MALE, PatientStatus.CRITICAL,
         ),
         Patients(
             8,
@@ -99,7 +100,7 @@ object PatientList {
             "laura.anderson@example.com",
             "Patient undergoing therapy.",
             "Female",
-            "", PatientStatus.OBSERVATION,
+            Gender.MALE, PatientStatus.OBSERVATION,
         ),
         Patients(
             9,
@@ -111,7 +112,7 @@ object PatientList {
             "james.taylor@example.com",
             "Patient with respiratory issues.",
             "Male",
-            "", PatientStatus.CRITICAL,
+            Gender.MALE, PatientStatus.CRITICAL,
         ),
         Patients(
             10,
@@ -123,7 +124,7 @@ object PatientList {
             "sophia.thomas@example.com",
             "Patient with minor injuries.",
             "Female",
-            "", PatientStatus.STABLE,
+            Gender.MALE, PatientStatus.STABLE,
         )
     )
 }

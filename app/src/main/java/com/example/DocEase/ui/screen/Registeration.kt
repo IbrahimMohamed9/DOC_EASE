@@ -1,26 +1,39 @@
 package com.example.DocEase.ui.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,12 +56,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
+import com.example.DocEase.model.models.Gender
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
 import com.example.DocEase.ui.viewModel.AppViewModelProvider
 import com.example.DocEase.ui.viewModel.screens.LoginRegistrationViewModel
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
 
 object RegistrationDestination : NavigationDestination {
     override val route = "register"
@@ -68,6 +84,7 @@ fun RegistrationScreenNavigation(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(
     navigateToLogin: () -> Unit,
@@ -80,22 +97,32 @@ fun RegistrationScreen(
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordRepeat by remember { mutableStateOf("") }
+    val date = LocalDate.now().minusYears(29)
+    val milliseconds = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    val state = rememberDatePickerState(milliseconds)
+    var DOB by remember { mutableStateOf("") }
 
     var showPassword by remember { mutableStateOf(false) }
+    var showPasswordRepeat by remember { mutableStateOf(false) }
     var checkPassword by remember { mutableStateOf(true) }
     var checkEmail by remember { mutableStateOf(false) }
+    var expandedItems by remember { mutableStateOf(false) }
+    var openCalendar by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
     var uiState = viewModel.doctorsUiState
     var detailsState = uiState.doctorsDetails
 
+    viewModel.updateUiState(detailsState.copy(DOB = "${date.dayOfMonth}-${date.monthValue}-${date.year}"))
     Column(
         modifier = Modifier
             .fillMaxSize()
             .wrapContentWidth()
-            .padding(vertical = 50.dp)
+            .padding(vertical = 30.dp, horizontal = 8.dp)
             .verticalScroll(
                 rememberScrollState()
             ),
@@ -108,7 +135,7 @@ fun RegistrationScreen(
             modifier = Modifier.size(width = 100.dp, height = 100.dp)
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = stringResource(id = R.string.app_name),
@@ -117,9 +144,11 @@ fun RegistrationScreen(
             color = Color.Blue
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
+        Row {
         TextField(
+            modifier = Modifier.fillMaxSize(0.5f),
             value = name,
             onValueChange = {
                 name = it;
@@ -140,7 +169,7 @@ fun RegistrationScreen(
 
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
         TextField(
             value = surname,
@@ -161,11 +190,13 @@ fun RegistrationScreen(
                 imeAction = ImeAction.Next
             )
         )
+        }
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
             value = email,
+            modifier = Modifier.fillMaxSize(),
             onValueChange = {
                 email = it;
                 viewModel.updateUiState(detailsState.copy(email = it))
@@ -184,9 +215,107 @@ fun RegistrationScreen(
             )
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
+            modifier = Modifier.fillMaxSize(),
+            value = phoneNumber,
+            onValueChange = {
+                phoneNumber = it;
+                viewModel.updateUiState(detailsState.copy(phoneNumber = it))
+            },
+            label = {
+                Text(text = "Phone Number")
+            },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            )
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+        Box {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = gender,
+
+                onValueChange = { },
+                readOnly = true,
+                placeholder = {
+                    Text(text = "Gender")
+                },
+                trailingIcon = {
+                    Icon(
+                        Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        modifier = Modifier.clickable { expandedItems = true })
+                },
+            )
+            DropdownMenu(
+                expanded = expandedItems,
+                onDismissRequest = { expandedItems = false },
+                modifier = Modifier.width(280.dp)
+            ) {
+                Gender.entries.map {
+                    DropdownMenuItem(text = {
+                        Text(text = it.value)
+                    }, onClick = {
+                        gender = it.value
+                        expandedItems = false
+                        viewModel.updateUiState(detailsState.copy(gender = it))
+
+                    }, modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Box {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = DOB,
+
+                onValueChange = { },
+                readOnly = true,
+                placeholder = {
+                    Text(text = "Date Of Birth")
+                },
+                trailingIcon = {
+                    Icon(
+                        Icons.Default.DateRange,
+                        contentDescription = null,
+                        modifier = Modifier.clickable { openCalendar = true })
+                },
+            )
+            if (openCalendar) {
+                DatePickerDialog(
+                    onDismissRequest = { openCalendar = false },
+                    confirmButton = {
+                        Button(onClick = {
+                            openCalendar = false
+                            val dateString =
+                                SimpleDateFormat("yyyy-MM-dd").format(state.selectedDateMillis)
+                            val selectedDate = LocalDate.parse(dateString)
+                            DOB =
+                                "${selectedDate.dayOfMonth}-${selectedDate.monthValue}-${selectedDate.year}"
+                            viewModel.updateUiState(detailsState.copy(DOB = DOB))
+                        }) {
+                            Text(text = "Confirm")
+                        }
+                    }) {
+                    DatePicker(
+                        state = state
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        TextField(
+            modifier = Modifier.fillMaxSize(),
             value = password,
             onValueChange = {
                 password = it;
@@ -218,23 +347,40 @@ fun RegistrationScreen(
             )
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
+            modifier = Modifier.fillMaxSize(),
             value = passwordRepeat,
             onValueChange = { passwordRepeat = it },
             label = {
-                Text(text = "repeat password")
+                Text(text = "Repeat Password")
             },
-            visualTransformation = PasswordVisualTransformation(),
-            isError = !checkPassword,
+            visualTransformation = if (showPasswordRepeat) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation()
+            },
+            trailingIcon = {
+                Icon(
+                    painter = if (showPasswordRepeat) {
+                        painterResource(id = R.drawable.baseline_visibility_24)
+                    } else {
+                        painterResource(id = R.drawable.baseline_visibility_off_24)
+                    },
+                    contentDescription = "",
+                    modifier = Modifier.clickable(onClick = {
+                        showPasswordRepeat = !showPasswordRepeat
+                    })
+                )
+            },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             )
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 5.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         TextButton(
             onClick = {
@@ -245,7 +391,7 @@ fun RegistrationScreen(
             Text(text = "Have an account?")
         }
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
             checkPassword = password == passwordRepeat

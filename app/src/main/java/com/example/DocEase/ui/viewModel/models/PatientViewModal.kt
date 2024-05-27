@@ -1,18 +1,20 @@
 package com.example.DocEase.ui.viewModel.models
 
 import com.example.DocEase.model.enums.PatientStatus
+import com.example.DocEase.model.models.Gender
 import com.example.DocEase.model.models.Patients
+import java.time.LocalDate
 
 data class PatientsDetails(
     val patientId: Int = 0,
     val name: String = "",
     val surname: String = "",
-    val DOJ: String = "", //date of join
+    val DOJ: String = "${currentTime.dayOfMonth}-${currentTime.monthValue}-${currentTime.year}", //date of join
     val DOB: String = "", //date of birth
     val phoneNumber: String = "",
     val email: String = "",
     val password: String = "",
-    val gender: String = "",
+    val gender: Gender = Gender.FEMALE,
     val description: String = "",
     val status: PatientStatus = PatientStatus.STABLE
 )
