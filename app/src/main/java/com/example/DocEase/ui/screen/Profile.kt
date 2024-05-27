@@ -209,26 +209,6 @@ fun ProfileScreen() {
 
 @Composable
 fun ProfileImage() {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
-
-    val context = LocalContext.current
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        imageUri = uri
-    }
-
-    imageUri?.let {
-        if (Build.VERSION.SDK_INT < 28) {
-            bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-        } else {
-            val source = ImageDecoder.createSource(context.contentResolver, it)
-            bitmap.value = ImageDecoder.decodeBitmap(source)
-        }
-    }
-
     val colorsBrush = remember {
         Brush.sweepGradient(
             listOf(
@@ -244,15 +224,6 @@ fun ProfileImage() {
         )
     }
     val imageSize = 150.dp
-    val modifier = Modifier
-        .size(imageSize)
-        .border(
-            BorderStroke(5.dp, colorsBrush), CircleShape
-        )
-        .clip(CircleShape)
-        .clickable {
-            launcher.launch("image/*")
-        }
     val contentDescription = "Profile Image"
     val contentScale = ContentScale.Crop
 
@@ -263,23 +234,17 @@ fun ProfileImage() {
                 .background(Color.White),
             contentAlignment = Alignment.BottomEnd
         ) {
-            if (bitmap.value != null) {
-                bitmap.value?.let { btm ->
-                    Image(
-                        bitmap = btm.asImageBitmap(),
-                        contentDescription = contentDescription,
-                        contentScale = contentScale,
-                        modifier = modifier
-                    )
-                }
-            } else {
                 Image(
                     painter = painterResource(id = R.drawable.doctor),
                     contentDescription = contentDescription,
                     contentScale = contentScale,
-                    modifier = modifier
+                    modifier = Modifier
+                        .size(imageSize)
+                        .border(
+                            BorderStroke(5.dp, colorsBrush), CircleShape
+                        )
+                        .clip(CircleShape)
                 )
-            }
 
             Icon(
                 painter = painterResource(R.drawable.baseline_camera_alt_24),
