@@ -11,11 +11,11 @@ object PatientList {
             "Doe",
             "2021-01-01",
             "1980-05-15",
-            1234567890,
+            "1234567890",
             "john.doe@example.com",
             "Patient with mild symptoms.",
             "Male",
-            PatientStatus.STABLE
+            "", PatientStatus.STABLE,
         ),
         Patients(
             2,
@@ -23,11 +23,11 @@ object PatientList {
             "Smith",
             "2021-02-14",
             "1975-03-20",
-            9876543210,
+            "9876543210",
             "jane.smith@example.com",
             "Patient recovering from surgery.",
             "Female",
-            PatientStatus.OBSERVATION
+            "", PatientStatus.OBSERVATION,
         ),
         Patients(
             3,
@@ -35,11 +35,11 @@ object PatientList {
             "Brown",
             "2021-03-10",
             "1990-07-11",
-            4561237890,
+            "4561237890",
             "robert.brown@example.com",
             "Patient with chronic illness.",
             "Male",
-            PatientStatus.CRITICAL
+            "", PatientStatus.CRITICAL,
         ),
         Patients(
             4,
@@ -47,11 +47,11 @@ object PatientList {
             "Jones",
             "2021-04-25",
             "1985-12-01",
-            7890123456,
+            "7890123456",
             "emily.jones@example.com",
             "Patient with high blood pressure.",
             "Female",
-            PatientStatus.OBSERVATION
+            "", PatientStatus.OBSERVATION,
         ),
         Patients(
             5,
@@ -59,11 +59,11 @@ object PatientList {
             "Davis",
             "2021-05-30",
             "1982-08-19",
-            3216549870,
+            "3216549870",
             "michael.davis@example.com",
             "Patient with diabetes.",
             "Male",
-            PatientStatus.STABLE
+            "", PatientStatus.STABLE,
         ),
         Patients(
             6,
@@ -71,11 +71,11 @@ object PatientList {
             "Wilson",
             "2021-06-17",
             "1995-09-23",
-            6549873210,
+            "6549873210",
             "sarah.wilson@example.com",
             "Patient with allergy symptoms.",
             "Female",
-            PatientStatus.STABLE
+            "", PatientStatus.STABLE,
         ),
         Patients(
             7,
@@ -83,11 +83,11 @@ object PatientList {
             "Martinez",
             "2021-07-08",
             "1992-11-05",
-            7418529630,
+            "7418529630",
             "david.martinez@example.com",
             "Patient with heart condition.",
             "Male",
-            PatientStatus.CRITICAL
+            "", PatientStatus.CRITICAL,
         ),
         Patients(
             8,
@@ -95,11 +95,11 @@ object PatientList {
             "Anderson",
             "2021-08-20",
             "1988-10-30",
-            8529637410,
+            "8529637410",
             "laura.anderson@example.com",
             "Patient undergoing therapy.",
             "Female",
-            PatientStatus.OBSERVATION
+            "", PatientStatus.OBSERVATION,
         ),
         Patients(
             9,
@@ -107,11 +107,11 @@ object PatientList {
             "Taylor",
             "2021-09-12",
             "1978-04-17",
-            9632587410,
+            "9632587410",
             "james.taylor@example.com",
             "Patient with respiratory issues.",
             "Male",
-            PatientStatus.CRITICAL
+            "", PatientStatus.CRITICAL,
         ),
         Patients(
             10,
@@ -119,11 +119,11 @@ object PatientList {
             "Thomas",
             "2021-10-05",
             "1986-06-14",
-            3698521470,
+            "3698521470",
             "sophia.thomas@example.com",
             "Patient with minor injuries.",
             "Female",
-            PatientStatus.STABLE
+            "", PatientStatus.STABLE,
         )
     )
 }

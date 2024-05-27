@@ -1,6 +1,7 @@
 package com.example.DocEase.ui.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,8 +41,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
+import com.example.DocEase.ui.viewModel.AppViewModelProvider
+import com.example.DocEase.ui.viewModel.screens.LoginRegistrationViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
 object RegistrationDestination : NavigationDestination {
     override val route = "register"
@@ -63,7 +71,11 @@ fun RegistrationScreenNavigation(
 @Composable
 fun RegistrationScreen(
     navigateToLogin: () -> Unit,
-    navigateToProfilePage: (Int) -> Unit
+    navigateToProfilePage: (Int) -> Unit,
+    viewModel: LoginRegistrationViewModel = viewModel(
+        factory =
+        AppViewModelProvider.Factory
+    )
 ) {
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
@@ -74,6 +86,10 @@ fun RegistrationScreen(
     var showPassword by remember { mutableStateOf(false) }
     var checkPassword by remember { mutableStateOf(true) }
     var checkEmail by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+    var uiState = viewModel.doctorsUiState
+    var detailsState = uiState.doctorsDetails
 
     Column(
         modifier = Modifier
@@ -105,7 +121,10 @@ fun RegistrationScreen(
 
         TextField(
             value = name,
-            onValueChange = { name = it },
+            onValueChange = {
+                name = it;
+                viewModel.updateUiState(detailsState.copy(name = it))
+            },
             enabled = true,
             label = {
                 Text(text = "name")
@@ -121,12 +140,14 @@ fun RegistrationScreen(
 
         )
 
-
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         TextField(
             value = surname,
-            onValueChange = { surname = it },
+            onValueChange = {
+                surname = it;
+                viewModel.updateUiState(detailsState.copy(surname = it))
+            },
             enabled = true,
             label = {
                 Text(text = "surname")
@@ -145,7 +166,10 @@ fun RegistrationScreen(
 
         TextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it;
+                viewModel.updateUiState(detailsState.copy(email = it))
+            },
             enabled = true,
             label = {
                 Text(text = "email")
@@ -164,7 +188,10 @@ fun RegistrationScreen(
 
         TextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = {
+                password = it;
+                viewModel.updateUiState(detailsState.copy(password = it))
+            },
             label = {
                 Text(text = "password")
             },
@@ -223,8 +250,15 @@ fun RegistrationScreen(
         Button(onClick = {
             checkPassword = password == passwordRepeat
             checkEmail = !checkEmail(email)
-            if (checkPassword && checkEmail) {
-                navigateToProfilePage(0)
+            if (!(checkPassword && checkEmail)) {
+                coroutineScope.launch {
+                    if (viewModel.register()) {
+                        viewModel.getDoctorByEmail().first()
+                            ?.let { navigateToProfilePage(it.doctorId) }
+                    } else {
+                        checkEmail = false
+                    }
+                }
             }
         }) {
             Text(

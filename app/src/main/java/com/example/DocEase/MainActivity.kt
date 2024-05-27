@@ -11,14 +11,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.DocEase.ui.screen.navigation.DocNavHost
-import com.example.DocEase.ui.theme.DoctsysTheme
+import com.example.DocEase.ui.theme.DocEaseTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DoctsysTheme {
+            DocEaseTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

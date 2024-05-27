@@ -14,4 +14,8 @@ class DoctorRepository(private val doctorDao: DoctorDao) : BaseRepository<Doctor
     override fun getOneStream(id: Int): Flow<Doctors?> = doctorDao.getDoctor(id)
 
     override fun getAll(): Flow<List<Doctors>> = doctorDao.getDoctors()
+
+     fun login(email: String, password: String): Flow<Doctors?> = doctorDao.login(email, password)
+
+     fun getEmailDoctor(email: String): Flow<Doctors?> = doctorDao.getEmailDoctor(email)
 }

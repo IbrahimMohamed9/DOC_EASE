@@ -1,6 +1,7 @@
 package com.example.DocEase.ui.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,8 +40,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
+import com.example.DocEase.ui.viewModel.AppViewModelProvider
+import com.example.DocEase.ui.viewModel.screens.LoginRegistrationViewModel
+import kotlinx.coroutines.launch
 
 object LoginDestination : NavigationDestination {
     override val route = "login"
@@ -62,13 +68,22 @@ fun LoginScreenNavigation(
 @Composable
 fun LoginScreen(
     navigateToRegister: () -> Unit,
-    navigateToProfilePage: (Int) -> Unit
+    navigateToProfilePage: (Int) -> Unit,
+    viewModel: LoginRegistrationViewModel = viewModel(
+        factory =
+        AppViewModelProvider.Factory
+    )
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     var showPassword by remember { mutableStateOf(false) }
     var checkEmail by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+    var uiState = viewModel.doctorsUiState
+    var detailsState = uiState.doctorsDetails
+
 
     Column(
         modifier = Modifier
@@ -99,7 +114,10 @@ fun LoginScreen(
 
         TextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it;
+                viewModel.updateUiState(detailsState.copy(email = it))
+            },
             enabled = true,
             label = {
                 Text(text = "email")
@@ -118,7 +136,10 @@ fun LoginScreen(
 
         TextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = {
+                password = it;
+                viewModel.updateUiState(detailsState.copy(password = it))
+            },
             label = {
                 Text(text = "password")
             },
@@ -152,9 +173,14 @@ fun LoginScreen(
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         Button(onClick = {
-            checkEmail = !checkEmail(email)
-            if (checkEmail) {
-                navigateToProfilePage(0)
+            Log.d("login afdsf", viewModel.doctorsUiState.toString())
+            Log.d("login asd", viewModel.doctorsUiState.doctorsDetails.password)
+
+            coroutineScope.launch {
+                if (viewModel.login()) {
+                    Log.d("login", viewModel.doctorsUiState.toString())
+                    navigateToProfilePage(viewModel.doctorsUiState.doctorsDetails.doctorId)
+                }
             }
         }) {
             Text(

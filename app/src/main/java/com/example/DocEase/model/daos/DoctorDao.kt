@@ -25,4 +25,10 @@ interface DoctorDao {
 
     @Query("SELECT * FROM doctors")
     fun getDoctors(): Flow<List<Doctors>>
+
+    @Query("SELECT * FROM doctors WHERE email = :email AND password = :password")
+    fun login(email: String, password: String): Flow<Doctors?>
+
+    @Query("SELECT * FROM doctors WHERE email = :email")
+    fun getEmailDoctor(email: String): Flow<Doctors?>
 }
