@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
+import com.example.DocEase.model.enums.MedicalSpecialization
 import com.example.DocEase.model.models.Gender
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
 import com.example.DocEase.ui.viewModel.AppViewModelProvider
@@ -111,18 +112,21 @@ fun RegistrationScreen(
     val milliseconds = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
     val state = rememberDatePickerState(milliseconds)
     var DOB by remember { mutableStateOf("") }
+    var medicSpeci by remember { mutableStateOf("") }
 
     var showPassword by remember { mutableStateOf(false) }
     var showPasswordRepeat by remember { mutableStateOf(false) }
     var checkPassword by remember { mutableStateOf(true) }
     var checkEmail by remember { mutableStateOf(false) }
     var expandedItems by remember { mutableStateOf(false) }
+    var expandedMedi by remember { mutableStateOf(false) }
     var openCalendar by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
-    var uiState = viewModel.doctorsUiState
-    var detailsState = uiState.doctorsDetails
+    val uiState = viewModel.doctorsUiState
+    val detailsState = uiState.doctorsDetails
 
+    val spacerModifier = Modifier.height(10.dp)
     viewModel.updateUiState(detailsState.copy(DOB = "${date.dayOfMonth}-${date.monthValue}-${date.year}"))
     Column(
         modifier = Modifier
@@ -138,11 +142,12 @@ fun RegistrationScreen(
         Image(
             painter = painterResource(id = R.drawable.doctor),
             contentDescription = "",
-            modifier = Modifier.size(width = 100.dp, height = 100.dp)
+            modifier = Modifier
+                .size(width = 100.dp, height = 100.dp)
                 .clip(CircleShape)
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = spacerModifier)
 
         Text(
             text = stringResource(id = R.string.app_name),
@@ -151,14 +156,14 @@ fun RegistrationScreen(
             color = Color.Blue
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = spacerModifier)
 
         Row {
         TextField(
             modifier = Modifier.fillMaxSize(0.5f),
             value = name,
             onValueChange = {
-                name = it;
+                name = it
                 viewModel.updateUiState(detailsState.copy(name = it))
             },
             enabled = true,
@@ -181,7 +186,7 @@ fun RegistrationScreen(
         TextField(
             value = surname,
             onValueChange = {
-                surname = it;
+                surname = it
                 viewModel.updateUiState(detailsState.copy(surname = it))
             },
             enabled = true,
@@ -199,13 +204,12 @@ fun RegistrationScreen(
         )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-
+        Spacer(modifier = spacerModifier)
         TextField(
             value = email,
             modifier = Modifier.fillMaxSize(),
             onValueChange = {
-                email = it;
+                email = it
                 viewModel.updateUiState(detailsState.copy(email = it))
             },
             enabled = true,
@@ -222,13 +226,12 @@ fun RegistrationScreen(
             )
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
-
+        Spacer(modifier = spacerModifier)
         TextField(
             modifier = Modifier.fillMaxSize(),
             value = phoneNumber,
             onValueChange = {
-                phoneNumber = it;
+                phoneNumber = it
                 viewModel.updateUiState(detailsState.copy(phoneNumber = it))
             },
             label = {
@@ -240,7 +243,7 @@ fun RegistrationScreen(
             )
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = spacerModifier)
         Box {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -277,8 +280,7 @@ fun RegistrationScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-
+        Spacer(modifier = spacerModifier)
         Box {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -319,13 +321,48 @@ fun RegistrationScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = spacerModifier)
+        Box {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                value = medicSpeci,
 
+                onValueChange = { },
+                readOnly = true,
+                placeholder = {
+                    Text(text = "Medical Specialization")
+                },
+                trailingIcon = {
+                    Icon(Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        modifier = Modifier.clickable { expandedMedi = true })
+                },
+            )
+            DropdownMenu(
+                expanded = expandedMedi,
+                onDismissRequest = { expandedMedi = false },
+                modifier = Modifier.width(280.dp)
+            ) {
+                MedicalSpecialization.entries.map {
+                    DropdownMenuItem(text = {
+                        Text(text = it.value)
+                    }, onClick = {
+                        medicSpeci = it.value
+                        expandedMedi = false
+                        viewModel.updateUiState(detailsState.copy(medicalSpecialization = it))
+                    }, modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = spacerModifier)
         TextField(
             modifier = Modifier.fillMaxSize(),
             value = password,
             onValueChange = {
-                password = it;
+                password = it
                 viewModel.updateUiState(detailsState.copy(password = it))
             },
             label = {
@@ -354,7 +391,7 @@ fun RegistrationScreen(
             )
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = spacerModifier)
 
         TextField(
             modifier = Modifier.fillMaxSize(),
@@ -398,8 +435,7 @@ fun RegistrationScreen(
             Text(text = "Have an account?")
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-
+        Spacer(modifier = spacerModifier)
         Button(onClick = {
             checkPassword = password == passwordRepeat
             checkEmail = !checkEmail(email)

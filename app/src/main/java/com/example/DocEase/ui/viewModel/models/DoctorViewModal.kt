@@ -7,19 +7,20 @@ import com.example.DocEase.model.models.Doctors
 import com.example.DocEase.model.models.Gender
 import java.time.LocalDate
 
+
+//TODO make fix email and password
 @RequiresApi(Build.VERSION_CODES.O)
-val currentTime = LocalDate.now()
-data class DoctorsDetails @RequiresApi(Build.VERSION_CODES.O) constructor(
+data class DoctorsDetails constructor(
     val doctorId: Int = 0,
     val name: String = "",
     val surname: String = "",
-    val DOJ: String = "${currentTime.dayOfMonth}-${currentTime.monthValue}-${currentTime.year}", //date of join
+    val DOJ: String = "${LocalDate.now().dayOfMonth}-${LocalDate.now().monthValue}-${LocalDate.now().year}", //date of join
     val DOB: String = "", //date of birth
     val phoneNumber: String = "",
-    val email: String = "",
+    val email: String = "Ibrahemmohamedb@gmail.comfg",
     val gender: Gender = Gender.FEMALE,
     val medicalSpecialization: MedicalSpecialization = MedicalSpecialization.CARDIOLOGY,
-    val password: String = "",
+    val password: String = "123",
 )
 
 @RequiresApi(Build.VERSION_CODES.O)

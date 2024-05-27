@@ -1,15 +1,15 @@
 package com.example.DocEase.ui.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -56,6 +56,7 @@ object LoginDestination : NavigationDestination {
     override val title = "Login"
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun LoginScreenNavigation(
@@ -69,6 +70,7 @@ fun LoginScreenNavigation(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginScreen(
     navigateToRegister: () -> Unit,
@@ -78,17 +80,19 @@ fun LoginScreen(
         AppViewModelProvider.Factory
     )
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    //TODO fix email and password
+    var email by remember { mutableStateOf("Ibrahemmohamedb@gmail.comfg") }
+    var password by remember { mutableStateOf("123") }
 
     var showPassword by remember { mutableStateOf(false) }
     var checkEmail by remember { mutableStateOf(false) }
     var checPassword by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
-    var uiState = viewModel.doctorsUiState
-    var detailsState = uiState.doctorsDetails
+    val uiState = viewModel.doctorsUiState
+    val detailsState = uiState.doctorsDetails
 
+    val spacerModifier = Modifier.height(10.dp)
 
     Column(
         modifier = Modifier
@@ -103,12 +107,12 @@ fun LoginScreen(
         Image(
             painter = painterResource(id = R.drawable.doctor),
             contentDescription = "Doctor image",
-            modifier = Modifier.size(width = 100.dp, height = 100.dp)
+            modifier = Modifier
+                .size(width = 100.dp, height = 100.dp)
                 .clip(CircleShape)
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-
+        Spacer(modifier = spacerModifier)
         Text(
             text = stringResource(id = R.string.app_name),
             fontSize = 30.sp,
@@ -116,8 +120,7 @@ fun LoginScreen(
             color = Color.Blue
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-
+        Spacer(modifier = spacerModifier)
         TextField(
             value = email,
             onValueChange = {
@@ -137,8 +140,7 @@ fun LoginScreen(
             )
         )
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-
+        Spacer(modifier = spacerModifier)
         TextField(
             value = password,
             onValueChange = {
@@ -168,7 +170,6 @@ fun LoginScreen(
         )
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 5.dp))
-
         TextButton(
             onClick = { navigateToRegister() },
             modifier = Modifier.align(Alignment.End)
@@ -176,13 +177,11 @@ fun LoginScreen(
             Text(text = "Do not have an account")
         }
 
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-
+        Spacer(modifier = spacerModifier)
         Button(onClick = {
             coroutineScope.launch {
                 if(checkEmail(email)) {
                     if (viewModel.login()) {
-                        Log.d("login", viewModel.doctorsUiState.toString())
                         navigateToProfilePage(viewModel.doctorsUiState.doctorsDetails.doctorId)
                     } else {
                         checkEmail = true
@@ -203,6 +202,7 @@ fun LoginScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview(){
