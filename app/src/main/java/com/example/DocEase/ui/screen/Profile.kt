@@ -79,7 +79,7 @@ fun ProfileScreenNavigation(
     navigateToSchedules: ()->Unit) {
     Scaffold(
         content = { ProfileScreen() },
-        bottomBar = { DocBottomNavBar({},navigateToSchedules, navigateToPatients,0) }
+        bottomBar = { DocBottomNavBar({},navigateToSchedules, navigateToPatients) }
     )
 }
 

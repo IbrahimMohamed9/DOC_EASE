@@ -20,10 +20,9 @@ import com.example.DocEase.R
 
 @Composable
 fun DocBottomNavBar(
-    navigateToProfile: (Int)->Unit,
+    navigateToProfile: ()->Unit,
     navigateToSchedules: ()->Unit,
-    navigateToPatients: ()->Unit,
-    profileId: Int
+    navigateToPatients: ()->Unit
 ) {
     Column(
         modifier = Modifier
@@ -33,7 +32,7 @@ fun DocBottomNavBar(
         Row(
             modifier = Modifier.padding(horizontal = 50.dp)
         ) {
-            IconButton(onClick = {navigateToProfile(profileId) }) {
+            IconButton(onClick = { navigateToProfile() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.toppng_com_file_svg_profile_icon_vector_980x980),
                     contentDescription = "profile Icon",
@@ -69,5 +68,5 @@ fun DocBottomNavBar(
 @Preview(showBackground = true)
 @Composable
 fun DocBottomNavBarPreview() {
-    DocBottomNavBar({},{},{}, 1)
+    DocBottomNavBar({},{},{})
 }

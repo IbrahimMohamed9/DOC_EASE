@@ -80,9 +80,8 @@ object SchedulesDestination : NavigationDestination {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SchedulesScreenNavigation(
-    navigateToProfile: (Int) -> Unit,
+    navigateToProfile: () -> Unit,
     navigateToPatients: () -> Unit,
-    profileId: Int,
     navigateToSchedule: (Int) -> Unit
 ) {
     Scaffold(
@@ -90,7 +89,7 @@ fun SchedulesScreenNavigation(
         content = { SchedulesScreen(navigateToSchedule) },
         bottomBar = {
             DocBottomNavBar(
-                navigateToProfile, { }, navigateToPatients, profileId
+                navigateToProfile, { }, navigateToPatients
             )
         },
     )
@@ -238,8 +237,6 @@ fun ScheduleDialog(onDismiss: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-
-//                TODO finish this by using those variable
                 var patientId: Int by remember { mutableStateOf(0) }
                 var patientIdText by remember { mutableStateOf("") }
                 var patientIdError by remember { mutableStateOf(false) }
@@ -381,7 +378,7 @@ fun SchedulesScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun SchedulesScreenNavigationPreview() {
-    SchedulesScreenNavigation({}, {}, 1, {})
+    SchedulesScreenNavigation({}, {}, {})
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

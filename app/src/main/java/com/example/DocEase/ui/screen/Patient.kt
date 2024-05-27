@@ -21,7 +21,7 @@ object PatientDestination : NavigationDestination {
 fun PatientScreenNavigation(
     navigateToPatients: () -> Unit,
     navigateToSchedules: () -> Unit,
-    navigateToProfile: (Int) -> Unit,
+    navigateToProfile: () -> Unit,
     navigateBack: () -> Unit,
 ) {
     Scaffold(
@@ -31,8 +31,7 @@ fun PatientScreenNavigation(
             DocBottomNavBar(
                 navigateToProfile,
                 navigateToSchedules,
-                navigateToPatients,
-                0
+                navigateToPatients
             )
         }
     )

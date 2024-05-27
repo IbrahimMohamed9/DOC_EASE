@@ -20,7 +20,8 @@ object ScheduleDestination : NavigationDestination {
 @Composable
 fun ScheduleScreenNavigation(
     navigateToPatients: () -> Unit,
-    navigateToSchedules: () -> Unit, navigateToProfile: (Int) -> Unit,
+    navigateToSchedules: () -> Unit,
+    navigateToProfile: () -> Unit,
     navigateBack: () -> Unit
 ) {
     Scaffold(
@@ -30,8 +31,7 @@ fun ScheduleScreenNavigation(
             DocBottomNavBar(
                 navigateToProfile,
                 navigateToSchedules,
-                navigateToPatients,
-                0
+                navigateToPatients
             )
         }
     )

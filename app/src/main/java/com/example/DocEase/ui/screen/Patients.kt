@@ -78,14 +78,13 @@ object PatientsDestination : NavigationDestination {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PatientsScreenNavigation(
-    navigateToProfile: (Int)->Unit,
+    navigateToProfile: ()->Unit,
     navigateToSchedules: ()->Unit,
-    profileId: Int,
     navigateToPatient: (Int) -> Unit
 ) {
     Scaffold(
         floatingActionButton = { FloatingActionButton() },
-        bottomBar = { DocBottomNavBar(navigateToProfile, navigateToSchedules, {}, profileId) }
+        bottomBar = { DocBottomNavBar(navigateToProfile, navigateToSchedules, {}) }
     ) {
         PatientsScreen(navigateToPatient)
     }
@@ -179,6 +178,7 @@ fun PatientCard(patient: Patients, index: Int, onClick: (Int) -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FloatingActionButton() {
@@ -380,7 +380,7 @@ fun PatientsScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun PatientsScreenNavigationPreview(){
-    PatientsScreenNavigation({}, {}, 3, {})
+    PatientsScreenNavigation({}, {}, {})
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
