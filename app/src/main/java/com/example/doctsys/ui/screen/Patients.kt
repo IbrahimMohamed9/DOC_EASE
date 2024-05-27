@@ -4,13 +4,17 @@ package com.example.doctsys.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +22,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -47,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,9 +62,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.doctsys.R
-import com.example.doctsys.model.Disease
-import com.example.doctsys.model.Schedule
-import com.example.doctsys.model.ScheduleList
+import com.example.doctsys.model.Patient
+import com.example.doctsys.model.PatientList
+import com.example.doctsys.model.PatientStatus
 import com.example.doctsys.ui.screen.navigation.DocBottomNavBar
 import com.example.doctsys.ui.screen.navigation.NavigationDestination
 import java.text.SimpleDateFormat
@@ -96,20 +102,21 @@ fun PatientsScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn {
-            items(ScheduleList.scheduleList) { schedule ->
-                PatientCard(schedule = schedule)
+            itemsIndexed(PatientList.patientList) { index, patient ->
+                PatientCard(patient = patient, index = index, { Log.d("sdf", "${patient.patientId}")})
             }
         }
     }
 }
 
 @Composable
-fun PatientCard(schedule: Schedule) {
+fun PatientCard(patient: Patient, index: Int, onClick : () -> Unit) {
     Card(
         modifier = Modifier
             .padding(5.dp)
             .width(350.dp)
             .height(110.dp)
+            .clickable(onClick = onClick)
     ) {
         Row(
             verticalAlignment = Alignment.Top,
@@ -117,7 +124,7 @@ fun PatientCard(schedule: Schedule) {
             modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 5.dp, end = 10.dp)
         ) {
             Image(
-                painter = painterResource(id = getScheduleImage(schedule.disease)),
+                painter = painterResource(id = getPatientImage(patient.gender, index)),
                 contentDescription = "schedule image",
                 modifier = Modifier
                     .size(100.dp)
@@ -133,13 +140,13 @@ fun PatientCard(schedule: Schedule) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column {
-                        Text(text = schedule.patientName, fontSize = 18.sp)
+                        Text(text = patient.patientName, fontSize = 18.sp)
 
-                        Text(text = schedule.disease.value, fontSize = 13.sp)
+                        Text(text = patient.email, fontSize = 13.sp)
 
-                        Spacer(modifier = Modifier.height(5.dp))
+                        Spacer(modifier = Modifier.height(3.dp))
                         Text(
-                            text = schedule.description, fontSize = 15.sp,
+                            text = patient.description, fontSize = 15.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -147,7 +154,28 @@ fun PatientCard(schedule: Schedule) {
                 }
 
                 Spacer(modifier = Modifier.height(6.dp))
-                Text(text = schedule.date, fontSize = 16.sp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = patient.DOJ, fontSize = 16.sp)
+
+                    val color = when (patient.status) {
+                        PatientStatus.STABLE -> Color.Green
+                        PatientStatus.OBSERVATION -> Color.Yellow
+                        PatientStatus.CRITICAL -> Color.Yellow
+                        else -> Color.Gray
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp)
+                            .aspectRatio(1f)
+                            .background(color = color, shape = CircleShape)
+                    )
+
+                    Text(text = patient.DOB, fontSize = 16.sp)
+                }
             }
         }
     }
@@ -323,16 +351,25 @@ fun PatientDialog(onDismiss: () -> Unit) {
 }
 
 
-//fun getScheduleImagee(disease: Disease): Int {
-//    return when (disease) {
-//        Disease.BACKPAIN -> R.drawable.what_to_do_back_pain_1200x628
-//        Disease.TEETHPAIN -> R.drawable.toothache_scaled
-//        Disease.ARMPAIN -> R.drawable.shoulder_pain_495x400
-//        Disease.LEGPAIN -> R.drawable.sciatica
-//        else -> R.drawable.sciatica
-//    }
-//}
-
+fun getPatientImage(gender: String, index: Int): Int {
+    val newIndex = index % 4
+    if (gender == "Male") {
+        return when (newIndex) {
+            0 -> R.drawable.man_person_people_avatar_icon_230017
+            1 -> R.drawable.male3_512
+            2 -> R.drawable.beard_hipster_male_svgrepo_com
+            3 -> R.drawable.avatar_male_man_svgrepo_com
+            else -> R.drawable.man_person_people_avatar_icon_230017
+        }
+    }
+    return when (newIndex) {
+        0 -> R.drawable.people_avatar_icon_png
+        1 -> R.drawable.pngwing_com
+        2 -> R.drawable.artist_avatar_marilyn_svgrepo_com
+        3 -> R.drawable.avatar_svgrepo_com
+        else -> R.drawable.avatar_female_portrait_svgrepo_com
+    }
+}
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable

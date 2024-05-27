@@ -82,13 +82,15 @@ object SchedulesDestination : NavigationDestination {
 fun ScheduleScreenNavigation(
     navigateToProfile: (Int) -> Unit, navigateToPatients: () -> Unit, profileId: Int
 ) {
-    Scaffold(floatingActionButton = { FloatingActionButtonFun() }, bottomBar = {
-        DocBottomNavBar(
-            navigateToProfile, { }, navigateToPatients, profileId
-        )
-    }) {
-        SchedulesScreen()
-    }
+    Scaffold(
+        floatingActionButton = { FloatingActionButtonFun() },
+        bottomBar = {
+            DocBottomNavBar(
+                navigateToProfile, { }, navigateToPatients, profileId
+            )
+        },
+        content = { SchedulesScreen() }
+    )
 }
 
 
@@ -139,7 +141,7 @@ fun SchedulesScreen() {
             val dateString = SimpleDateFormat("yyyy-MM-dd").format(state.selectedDateMillis)
             val selectedDate = LocalDate.parse(dateString)
             sheduleDate =
-                "${selectedDate.month} ${selectedDate.dayOfMonth}, ${selectedDate.year} Schedule"
+                "${selectedDate.month} ${selectedDate.dayOfMonth}, ${selectedDate.year} Schedules"
         }
 
         Text(

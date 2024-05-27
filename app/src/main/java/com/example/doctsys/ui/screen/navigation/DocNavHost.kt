@@ -8,16 +8,18 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.doctsys.ui.screen.PatientDestination
+import com.example.doctsys.ui.screen.PatientScreenNavigation
+import com.example.doctsys.ui.screen.PatientsDestination
 import com.example.doctsys.ui.screen.ProfileDestination
 import com.example.doctsys.ui.screen.ProfileScreenNavigation
+import com.example.doctsys.ui.screen.ScheduleDestination
+import com.example.doctsys.ui.screen.ScheduleScreenNavigation
+import com.example.doctsys.ui.screen.SchedulesDestination
 import com.example.doctsys.ui.screen.enterToApp.LoginDestination
 import com.example.doctsys.ui.screen.enterToApp.LoginScreenNavigation
 import com.example.doctsys.ui.screen.enterToApp.RegistrationDestination
 import com.example.doctsys.ui.screen.enterToApp.RegistrationScreenNavigation
-import com.example.doctsys.ui.screen.PatientScreenNavigation
-import com.example.doctsys.ui.screen.PatientsDestination
-import com.example.doctsys.ui.screen.ScheduleScreenNavigation
-import com.example.doctsys.ui.screen.SchedulesDestination
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -25,7 +27,7 @@ fun DocNavHost(
     navController: NavHostController
 ) {
     // TODO ensure this is login
-    NavHost(navController = navController, startDestination = PatientsDestination.route) {
+    NavHost(navController = navController, startDestination = LoginDestination.route) {
         composable(route = LoginDestination.route) {
             LoginScreenNavigation(
                 navigateToRegister = { navController.navigate(RegistrationDestination.route) },
@@ -49,6 +51,32 @@ fun DocNavHost(
             ProfileScreenNavigation(
                 navigateToSchedules = { navController.navigate(SchedulesDestination.route) },
                 navigateToPatients = {navController.navigate(PatientsDestination.route)}
+            )
+        }
+
+        composable(
+            route = PatientDestination.routeWithArgs,
+            arguments = listOf(navArgument(PatientDestination.patientIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            PatientScreenNavigation(
+                navigateToSchedules = { navController.navigate(SchedulesDestination.route) },
+                navigateToPatients = { navController.navigate(PatientsDestination.route) },
+                navigateToProfile = { navController.navigate("${ProfileDestination.route}/${it}") },
+            )
+        }
+
+        composable(
+            route = ScheduleDestination.routeWithArgs,
+            arguments = listOf(navArgument(ScheduleDestination.scheduleIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            ScheduleScreenNavigation(
+                navigateToSchedules = { navController.navigate(SchedulesDestination.route) },
+                navigateToPatients = { navController.navigate(PatientsDestination.route) },
+                navigateToProfile = { navController.navigate("${ProfileDestination.route}/${it}") },
             )
         }
 
