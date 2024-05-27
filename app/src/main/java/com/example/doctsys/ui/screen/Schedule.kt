@@ -3,8 +3,10 @@ package com.example.doctsys.ui.screen
 import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.doctsys.ui.screen.navigation.DocBottomNavBar
 import com.example.doctsys.ui.screen.navigation.NavigationDestination
+import com.example.doctsys.ui.screen.navigation.TopAppBar
 
 
 object ScheduleDestination : NavigationDestination {
@@ -18,11 +20,11 @@ object ScheduleDestination : NavigationDestination {
 @Composable
 fun ScheduleScreenNavigation(
     navigateToPatients: () -> Unit,
-    navigateToSchedules: () -> Unit,
-    navigateToProfile: (Int) -> Unit
+    navigateToSchedules: () -> Unit, navigateToProfile: (Int) -> Unit,
+    navigateBack: () -> Unit
 ) {
     Scaffold(
-//        topBar = { TopAppBar() },
+        topBar = { TopAppBar(ScheduleDestination.title, navigateBack) },
         content = { ScheduleScreen() },
         bottomBar = {
             DocBottomNavBar(
@@ -37,4 +39,16 @@ fun ScheduleScreenNavigation(
 
 @Composable
 fun ScheduleScreen() {
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ScheduleScreenPreview() {
+    ScheduleScreen()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ScheduleScreenNavigationPreview() {
+    ScheduleScreenNavigation({}, {}, {}, {})
 }

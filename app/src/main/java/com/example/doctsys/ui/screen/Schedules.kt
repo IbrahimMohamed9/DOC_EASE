@@ -79,17 +79,20 @@ object SchedulesDestination : NavigationDestination {
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ScheduleScreenNavigation(
-    navigateToProfile: (Int) -> Unit, navigateToPatients: () -> Unit, profileId: Int
+fun SchedulesScreenNavigation(
+    navigateToProfile: (Int) -> Unit,
+    navigateToPatients: () -> Unit,
+    profileId: Int,
+    navigateToSchedule: (Int) -> Unit
 ) {
     Scaffold(
         floatingActionButton = { FloatingActionButtonFun() },
+        content = { SchedulesScreen(navigateToSchedule) },
         bottomBar = {
             DocBottomNavBar(
                 navigateToProfile, { }, navigateToPatients, profileId
             )
         },
-        content = { SchedulesScreen() }
     )
 }
 
@@ -98,7 +101,7 @@ fun ScheduleScreenNavigation(
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SchedulesScreen() {
+fun SchedulesScreen(navigateToSchedule: (Int) -> Unit) {
     val tomorrow = LocalDate.now().plusDays(1)
     val state = rememberDatePickerState()
     var openCalendar by remember { mutableStateOf(false) }
@@ -133,7 +136,7 @@ fun SchedulesScreen() {
         Text(text = "Today Schedules", fontSize = 20.sp, modifier = Modifier.align(Alignment.Start))
         LazyRow {
             items(ScheduleList.scheduleList) { schedule ->
-                ScheduleCard(schedule = schedule)
+                ScheduleCard(schedule = schedule, navigateToSchedule)
             }
         }
         Divider(modifier = Modifier.padding(15.dp))
@@ -151,19 +154,20 @@ fun SchedulesScreen() {
 
         LazyColumn {
             items(ScheduleList.scheduleList) { schedule ->
-                ScheduleCard(schedule = schedule)
+                ScheduleCard(schedule = schedule, navigateToSchedule)
             }
         }
     }
 }
 
 @Composable
-fun ScheduleCard(schedule: Schedule) {
+fun ScheduleCard(schedule: Schedule, navigateToSchedule: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .padding(5.dp)
             .width(350.dp)
             .height(110.dp)
+            .clickable { navigateToSchedule(schedule.scheduleId) }
     ) {
         Row(
             verticalAlignment = Alignment.Top,
@@ -370,14 +374,14 @@ fun getScheduleImage(disease: Disease): Int {
 @Preview(showBackground = true)
 @Composable
 fun SchedulesScreenPreview() {
-    SchedulesScreen()
+    SchedulesScreen {}
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun ScheduleScreenNavigationPreview() {
-    ScheduleScreenNavigation({}, {}, 1)
+fun SchedulesScreenNavigationPreview() {
+    SchedulesScreenNavigation({}, {}, 1, {})
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

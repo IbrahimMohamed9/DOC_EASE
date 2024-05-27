@@ -4,7 +4,6 @@ package com.example.doctsys.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -78,23 +77,23 @@ object PatientsDestination : NavigationDestination {
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun PatientScreenNavigation(
+fun PatientsScreenNavigation(
     navigateToProfile: (Int)->Unit,
     navigateToSchedules: ()->Unit,
-    profileId: Int
+    profileId: Int,
+    navigateToPatient: (Int) -> Unit
 ) {
     Scaffold(
         floatingActionButton = { FloatingActionButton() },
-        bottomBar = { DocBottomNavBar(navigateToProfile, navigateToSchedules, {},profileId) }
+        bottomBar = { DocBottomNavBar(navigateToProfile, navigateToSchedules, {}, profileId) }
     ) {
-        PatientsScreen()
+        PatientsScreen(navigateToPatient)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PatientsScreen() {
+fun PatientsScreen(navigateToPatient: (Int) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -103,20 +102,20 @@ fun PatientsScreen() {
     ) {
         LazyColumn {
             itemsIndexed(PatientList.patientList) { index, patient ->
-                PatientCard(patient = patient, index = index, { Log.d("sdf", "${patient.patientId}")})
+                PatientCard(patient = patient, index = index, navigateToPatient)
             }
         }
     }
 }
 
 @Composable
-fun PatientCard(patient: Patient, index: Int, onClick : () -> Unit) {
+fun PatientCard(patient: Patient, index: Int, onClick: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .padding(5.dp)
             .width(350.dp)
             .height(110.dp)
-            .clickable(onClick = onClick)
+            .clickable(onClick = { onClick(patient.patientId) })
     ) {
         Row(
             verticalAlignment = Alignment.Top,
@@ -165,7 +164,6 @@ fun PatientCard(patient: Patient, index: Int, onClick : () -> Unit) {
                         PatientStatus.STABLE -> Color.Green
                         PatientStatus.OBSERVATION -> Color.Yellow
                         PatientStatus.CRITICAL -> Color.Yellow
-                        else -> Color.Gray
                     }
                     Box(
                         modifier = Modifier
@@ -370,18 +368,19 @@ fun getPatientImage(gender: String, index: Int): Int {
         else -> R.drawable.avatar_female_portrait_svgrepo_com
     }
 }
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PatientsScreenPreview() {
-    PatientsScreen()
+    PatientsScreen {}
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PatientScreenNavigationPreview(){
-    PatientScreenNavigation({},{},1)
+    PatientsScreenNavigation({}, {}, 3, {})
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

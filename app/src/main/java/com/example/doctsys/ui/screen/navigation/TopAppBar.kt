@@ -16,17 +16,14 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun TopAppBar(
     titleScreen: String,
-    canNavigateBack: Boolean,
-    navigateBack: () -> Unit = {}
+    navigateBack: () -> Unit
 ){
     CenterAlignedTopAppBar(
-        title = {Text(titleScreen)},
+        title = { Text(titleScreen) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
         navigationIcon = {
-            if (canNavigateBack){
-                IconButton(onClick = navigateBack ) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-                }
+            IconButton(onClick = navigateBack) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
         }
     )
@@ -36,5 +33,5 @@ fun TopAppBar(
 @Preview(showBackground = true)
 @Composable
 fun TopAppBarPreview(){
-    TopAppBar(titleScreen = "test", canNavigateBack = true, {})
+    TopAppBar(titleScreen = "test", {})
 }

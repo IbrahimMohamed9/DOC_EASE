@@ -11,11 +11,13 @@ import androidx.navigation.navArgument
 import com.example.doctsys.ui.screen.PatientDestination
 import com.example.doctsys.ui.screen.PatientScreenNavigation
 import com.example.doctsys.ui.screen.PatientsDestination
+import com.example.doctsys.ui.screen.PatientsScreenNavigation
 import com.example.doctsys.ui.screen.ProfileDestination
 import com.example.doctsys.ui.screen.ProfileScreenNavigation
 import com.example.doctsys.ui.screen.ScheduleDestination
 import com.example.doctsys.ui.screen.ScheduleScreenNavigation
 import com.example.doctsys.ui.screen.SchedulesDestination
+import com.example.doctsys.ui.screen.SchedulesScreenNavigation
 import com.example.doctsys.ui.screen.enterToApp.LoginDestination
 import com.example.doctsys.ui.screen.enterToApp.LoginScreenNavigation
 import com.example.doctsys.ui.screen.enterToApp.RegistrationDestination
@@ -64,6 +66,7 @@ fun DocNavHost(
                 navigateToSchedules = { navController.navigate(SchedulesDestination.route) },
                 navigateToPatients = { navController.navigate(PatientsDestination.route) },
                 navigateToProfile = { navController.navigate("${ProfileDestination.route}/${it}") },
+                navigateBack = { navController.navigateUp() }
             )
         }
 
@@ -77,22 +80,26 @@ fun DocNavHost(
                 navigateToSchedules = { navController.navigate(SchedulesDestination.route) },
                 navigateToPatients = { navController.navigate(PatientsDestination.route) },
                 navigateToProfile = { navController.navigate("${ProfileDestination.route}/${it}") },
+                navigateBack = { navController.navigateUp() }
             )
         }
 
         composable(route = PatientsDestination.route) {
-            PatientScreenNavigation(
+            PatientsScreenNavigation(
                 navigateToProfile = { navController.navigate("${ProfileDestination.route}/${it}") },
                 navigateToSchedules = { navController.navigate(SchedulesDestination.route) },
-                3
+                3,
+                navigateToPatient = { navController.navigate("${PatientDestination.route}/${it}") },
             )
         }
 
         composable(route = SchedulesDestination.route) {
-            ScheduleScreenNavigation(
+            SchedulesScreenNavigation(
                 navigateToProfile = { navController.navigate("${ProfileDestination.route}/${it}") },
                 navigateToPatients = {navController.navigate(PatientsDestination.route)},
-                0
+                0,
+                navigateToSchedule = { navController.navigate("${ScheduleDestination.route}/${it}") },
+
             )
         }
     }

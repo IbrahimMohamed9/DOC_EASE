@@ -20,10 +20,11 @@ object PatientDestination : NavigationDestination {
 fun PatientScreenNavigation(
     navigateToPatients: () -> Unit,
     navigateToSchedules: () -> Unit,
-    navigateToProfile: (Int) -> Unit
+    navigateToProfile: (Int) -> Unit,
+    navigateBack: () -> Unit,
 ) {
     Scaffold(
-//        topBar = { TopAppBar() },
+        topBar = { TopAppBar(PatientDestination.title, navigateBack) },
         content = { PatientScreen() },
         bottomBar = {
             DocBottomNavBar(
