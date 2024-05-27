@@ -1,4 +1,6 @@
-package com.example.doctsys.model
+package com.example.doctsys.model.models
+
+import com.example.doctsys.model.Disease
 
 data class Schedule(
     val scheduleId: Int,

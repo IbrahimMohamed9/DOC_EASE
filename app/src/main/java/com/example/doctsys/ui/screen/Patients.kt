@@ -61,7 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.doctsys.R
-import com.example.doctsys.model.Patient
+import com.example.doctsys.model.models.Patient
 import com.example.doctsys.model.PatientList
 import com.example.doctsys.model.PatientStatus
 import com.example.doctsys.ui.screen.navigation.DocBottomNavBar
@@ -197,6 +197,7 @@ fun FloatingActionButton() {
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @OptIn(ExperimentalMaterial3Api::class)
@@ -300,7 +301,6 @@ fun PatientDialog(onDismiss: () -> Unit) {
                         confirmButton = {
                             Button(onClick = {
                                 openCalendar = false
-
                                 val dateString =
                                     SimpleDateFormat("yyyy-MM-dd").format(state.selectedDateMillis)
                                 val selectedDate = LocalDate.parse(dateString)
@@ -379,10 +379,11 @@ fun PatientsScreenPreview() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PatientScreenNavigationPreview(){
+fun PatientsScreenNavigationPreview(){
     PatientsScreenNavigation({}, {}, 3, {})
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable

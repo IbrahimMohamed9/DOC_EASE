@@ -64,7 +64,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.doctsys.R
 import com.example.doctsys.model.Disease
-import com.example.doctsys.model.Schedule
+import com.example.doctsys.model.models.Schedule
 import com.example.doctsys.model.ScheduleList
 import com.example.doctsys.ui.screen.navigation.DocBottomNavBar
 import com.example.doctsys.ui.screen.navigation.NavigationDestination

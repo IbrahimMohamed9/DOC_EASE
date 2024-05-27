@@ -1,7 +1,6 @@
-package com.example.doctsys.ui.screen.enterToApp
+package com.example.doctsys.ui.screen
 
 import android.annotation.SuppressLint
-import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,44 +41,39 @@ import androidx.compose.ui.unit.sp
 import com.example.doctsys.R
 import com.example.doctsys.ui.screen.navigation.NavigationDestination
 
-object RegistrationDestination : NavigationDestination {
-    override val route = "register"
-    override val title = "Register"
+object LoginDestination : NavigationDestination {
+    override val route = "login"
+    override val title = "Login"
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegistrationScreenNavigation(
-    navigateToLogin: () -> Unit,
-    navigateToProfilePage: (Int) -> Unit
+fun LoginScreenNavigation(
+    navigateToProfilePage: (Int) -> Unit,
+    navigateToRegister: () -> Unit
 ) {
     Scaffold {
-        RegistrationScreen(
-            navigateToLogin = navigateToLogin, navigateToProfilePage = navigateToProfilePage
+        LoginScreen(
+            navigateToRegister = navigateToRegister, navigateToProfilePage = navigateToProfilePage
         )
     }
 }
 
 @Composable
-fun RegistrationScreen(
-    navigateToLogin: () -> Unit,
+fun LoginScreen(
+    navigateToRegister: () -> Unit,
     navigateToProfilePage: (Int) -> Unit
 ) {
-    var name by remember { mutableStateOf("") }
-    var surname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordRepeat by remember { mutableStateOf("") }
 
     var showPassword by remember { mutableStateOf(false) }
-    var checkPassword by remember { mutableStateOf(true) }
     var checkEmail by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .wrapContentWidth()
-            .padding(vertical = 50.dp)
             .verticalScroll(
                 rememberScrollState()
             ),
@@ -88,7 +82,7 @@ fun RegistrationScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.doctor),
-            contentDescription = "",
+            contentDescription = "Doctor image",
             modifier = Modifier.size(width = 100.dp, height = 100.dp)
         )
 
@@ -99,46 +93,6 @@ fun RegistrationScreen(
             fontSize = 30.sp,
             fontFamily = FontFamily.Cursive,
             color = Color.Blue
-        )
-
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-
-        TextField(
-            value = name,
-            onValueChange = { name = it },
-            enabled = true,
-            label = {
-                Text(text = "name")
-            },
-            placeholder = {
-                Text(text = "name")
-            },
-            isError = false,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            )
-
-        )
-
-
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-
-        TextField(
-            value = surname,
-            onValueChange = { surname = it },
-            enabled = true,
-            label = {
-                Text(text = "surname")
-            },
-            placeholder = {
-                Text(text = "surname")
-            },
-            isError = false,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            )
         )
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
@@ -173,7 +127,6 @@ fun RegistrationScreen(
             } else {
                 PasswordVisualTransformation()
             },
-            isError = !checkPassword,
             trailingIcon = {
                 Icon(
                     painter = if (showPassword) {
@@ -181,68 +134,42 @@ fun RegistrationScreen(
                     } else {
                         painterResource(id = R.drawable.baseline_visibility_off_24)
                     },
-                    contentDescription = "",
+                    contentDescription = "Visibility Icon",
                     modifier = Modifier.clickable(onClick = { showPassword = !showPassword })
                 )
             },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next
-            )
-        )
-
-        Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-
-        TextField(
-            value = passwordRepeat,
-            onValueChange = { passwordRepeat = it },
-            label = {
-                Text(text = "repeat password")
-            },
-            visualTransformation = PasswordVisualTransformation(),
-            isError = !checkPassword,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            )
         )
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 5.dp))
 
         TextButton(
-            onClick = {
-                navigateToLogin()
-            },
+            onClick = { navigateToRegister() },
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text(text = "Have an account?")
+            Text(text = "Do not have an account")
         }
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         Button(onClick = {
-            checkPassword = password == passwordRepeat
             checkEmail = !checkEmail(email)
-            if (checkPassword && checkEmail) {
+            if (checkEmail) {
                 navigateToProfilePage(0)
             }
         }) {
             Text(
-                text = "Registration",
+                text = "Login",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Light,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp)
             )
         }
-    }
-}
 
-fun checkEmail(email: String): Boolean {
-    return EMAIL_ADDRESS.matcher(email).matches()
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun RegistrationScreenPreview() {
-    RegistrationScreen({},{})
+fun LoginScreenPreview(){
+    LoginScreen({}, {})
 }

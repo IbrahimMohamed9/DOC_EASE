@@ -69,6 +69,5 @@ fun DocBottomNavBar(
 @Preview(showBackground = true)
 @Composable
 fun DocBottomNavBarPreview() {
-//    TopAppBar(titleScreen = "test", canNavigateBack = true, {})
     DocBottomNavBar({},{},{}, 1)
 }

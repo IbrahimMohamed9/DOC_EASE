@@ -3,6 +3,7 @@ package com.example.doctsys.ui.screen
 import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.doctsys.ui.screen.navigation.DocBottomNavBar
 import com.example.doctsys.ui.screen.navigation.NavigationDestination
 import com.example.doctsys.ui.screen.navigation.TopAppBar
@@ -39,4 +40,16 @@ fun PatientScreenNavigation(
 
 @Composable
 fun PatientScreen() {
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PatientScreenPreview() {
+    PatientScreen()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PatientScreenNavigationPreview() {
+    PatientScreenNavigation({}, {}, {}, {})
 }

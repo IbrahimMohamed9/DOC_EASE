@@ -1,4 +1,6 @@
-package com.example.doctsys.model
+package com.example.doctsys.model.models
+
+import com.example.doctsys.model.PatientStatus
 
 data class Patient(
     val patientId: Int,

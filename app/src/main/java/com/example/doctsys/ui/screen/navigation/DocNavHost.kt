@@ -18,10 +18,10 @@ import com.example.doctsys.ui.screen.ScheduleDestination
 import com.example.doctsys.ui.screen.ScheduleScreenNavigation
 import com.example.doctsys.ui.screen.SchedulesDestination
 import com.example.doctsys.ui.screen.SchedulesScreenNavigation
-import com.example.doctsys.ui.screen.enterToApp.LoginDestination
-import com.example.doctsys.ui.screen.enterToApp.LoginScreenNavigation
-import com.example.doctsys.ui.screen.enterToApp.RegistrationDestination
-import com.example.doctsys.ui.screen.enterToApp.RegistrationScreenNavigation
+import com.example.doctsys.ui.screen.LoginDestination
+import com.example.doctsys.ui.screen.LoginScreenNavigation
+import com.example.doctsys.ui.screen.RegistrationDestination
+import com.example.doctsys.ui.screen.RegistrationScreenNavigation
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

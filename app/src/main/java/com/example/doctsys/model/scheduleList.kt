@@ -1,5 +1,7 @@
 package com.example.doctsys.model
 
+import com.example.doctsys.model.models.Schedule
+
 val formattedDates = listOf(
     "2024-08-01",
     "2024-08-02",

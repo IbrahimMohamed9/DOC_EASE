@@ -1,5 +1,7 @@
 package com.example.doctsys.model
 
+import com.example.doctsys.model.models.Patient
+
 object PatientList {
     val patientList = listOf(
         Patient(
