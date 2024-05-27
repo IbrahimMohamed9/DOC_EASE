@@ -79,10 +79,11 @@ fun LoginScreen(
 
     var showPassword by remember { mutableStateOf(false) }
     var checkEmail by remember { mutableStateOf(false) }
+    var checPassword by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
-    var uiState = viewModel.doctorsUiState
-    var detailsState = uiState.doctorsDetails
+    val uiState = viewModel.doctorsUiState
+    val detailsState = uiState.doctorsDetails
 
 
     Column(
@@ -115,10 +116,9 @@ fun LoginScreen(
         TextField(
             value = email,
             onValueChange = {
-                email = it;
+                email = it
                 viewModel.updateUiState(detailsState.copy(email = it))
             },
-            enabled = true,
             label = {
                 Text(text = "email")
             },
@@ -137,9 +137,10 @@ fun LoginScreen(
         TextField(
             value = password,
             onValueChange = {
-                password = it;
+                password = it
                 viewModel.updateUiState(detailsState.copy(password = it))
             },
+            isError = checPassword,
             label = {
                 Text(text = "password")
             },
@@ -173,14 +174,17 @@ fun LoginScreen(
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         Button(onClick = {
-            Log.d("login afdsf", viewModel.doctorsUiState.toString())
-            Log.d("login asd", viewModel.doctorsUiState.doctorsDetails.password)
-
             coroutineScope.launch {
-                if (viewModel.login()) {
-                    Log.d("login", viewModel.doctorsUiState.toString())
-                    navigateToProfilePage(viewModel.doctorsUiState.doctorsDetails.doctorId)
+                if(checkEmail(email)) {
+                    if (viewModel.login()) {
+                        Log.d("login", viewModel.doctorsUiState.toString())
+                        navigateToProfilePage(viewModel.doctorsUiState.doctorsDetails.doctorId)
+                    } else {
+                        checkEmail = true
+                        checPassword = true
+                    }
                 }
+                checkEmail = true
             }
         }) {
             Text(
