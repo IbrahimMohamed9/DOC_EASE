@@ -158,7 +158,7 @@ fun PatientScreen(
                 onValueChange = { },
                 readOnly = true,
                 placeholder = {
-                    Text(text = "Medical Specialization")
+                    Text(text = "Patient Status")
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -188,7 +188,7 @@ fun PatientScreen(
                         expandedItems = false
                         viewModel.updateUiState(detailsState.copy(status = it))
                         coroutineScope.launch {
-                            viewModel.getPatient()
+                            viewModel.updatePatient()
                         }
                     }, modifier = Modifier.fillMaxSize()
                     )

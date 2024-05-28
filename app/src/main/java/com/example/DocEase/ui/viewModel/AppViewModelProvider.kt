@@ -12,6 +12,7 @@ import com.example.DocEase.ui.viewModel.screens.DoctorViewModal
 import com.example.DocEase.ui.viewModel.screens.LoginRegistrationViewModel
 import com.example.DocEase.ui.viewModel.screens.PatientViewModel
 import com.example.DocEase.ui.viewModel.screens.PatientsViewModel
+import com.example.DocEase.ui.viewModel.screens.ScheduleViewModel
 import com.example.DocEase.ui.viewModel.screens.SchedulesViewModel
 
 object AppViewModelProvider {
@@ -43,6 +44,13 @@ object AppViewModelProvider {
             SchedulesViewModel(
                 DocEaseApplication().container.scheduleRepository,
                 DocEaseApplication().container.patientRepository
+            )
+        }
+        initializer {
+            ScheduleViewModel(
+                DocEaseApplication().container.scheduleRepository,
+                DocEaseApplication().container.patientRepository,
+                this.createSavedStateHandle()
             )
         }
     }

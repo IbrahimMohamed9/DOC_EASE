@@ -43,10 +43,6 @@ class PatientViewModel(
         patientRepository.update(patientsUiState.patientsDetails.toPatients())
     }
 
-    fun getPatient(): Flow<Patients?> {
-        return patientRepository.getOneStream(patientsUiState.patientsDetails.toPatients().patientId)
-    }
-
     fun updateUiState(patientDetails: PatientsDetails) {
         patientsUiState =
             PatientsUiState(patientsDetails = patientDetails, isEntryValid = false)
