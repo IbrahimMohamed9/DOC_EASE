@@ -445,7 +445,7 @@ fun RegistrationScreen(
                         viewModel.getDoctorByEmail().first()
                             ?.let { navigateToProfilePage(it.doctorId) }
                     } else {
-                        checkEmail = false
+                        checkEmail = true
                     }
                 }
             }

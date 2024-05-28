@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,10 +29,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,11 +46,14 @@ import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,18 +61,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
 import com.example.DocEase.model.PatientList
 import com.example.DocEase.model.enums.PatientStatus
+import com.example.DocEase.model.models.Gender
 import com.example.DocEase.model.models.Patients
 import com.example.DocEase.ui.screen.navigation.DocBottomNavBar
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
+import com.example.DocEase.ui.viewModel.AppViewModelProvider
+import com.example.DocEase.ui.viewModel.screens.PatientViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 
@@ -200,9 +213,11 @@ fun FloatingActionButton() {
 @SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientDialog(onDismiss: () -> Unit) {
+fun PatientDialog(
+    onDismiss: () -> Unit,
+    viewModel: PatientViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -212,29 +227,40 @@ fun PatientDialog(onDismiss: () -> Unit) {
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Enter Details")
+                val coroutineScope = rememberCoroutineScope()
+                val uiState = viewModel.patientsUiState
+                val detailsState = uiState.patientsDetails
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-
-                var patientName by remember { mutableStateOf("") }
-                var patientSurName by remember { mutableStateOf("") }
+                var name by remember { mutableStateOf("") }
+                var surname by remember { mutableStateOf("") }
                 var DOB by remember { mutableStateOf("") }
                 var email by remember { mutableStateOf("") }
                 var phoneNumber by remember { mutableStateOf("") }
                 var description by remember { mutableStateOf("") }
-
+                var gender by remember { mutableStateOf("") }
+                var genderEnum by remember { mutableStateOf(Gender.FEMALE) }
+                var status by remember { mutableStateOf("") }
+                var statusEnum by remember { mutableStateOf(PatientStatus.STABLE) }
+                var appearGender by remember { mutableStateOf(false) }
+                var appearStatus by remember { mutableStateOf(false) }
+                var openCalendar by remember { mutableStateOf(false) }
+                var checkEmail by remember { mutableStateOf(false) }
+                val timeState = rememberDatePickerState()
 
                 //design values
                 val shape = RoundedCornerShape(10.dp)
+                val spacerModifier = Modifier.height(8.dp)
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = "Enter Details", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+
+                Spacer(modifier = Modifier.height(10.dp))
                 Row {
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(0.5f),
-                        value = patientName,
+                        value = name,
                         onValueChange = {
-                            patientName = it
+                            name = it
+                            viewModel.updateUiState(detailsState.copy(name = it))
                         },
                         shape = shape,
                         label = { Text("Name") },
@@ -242,43 +268,133 @@ fun PatientDialog(onDismiss: () -> Unit) {
                     Spacer(modifier = Modifier.width(8.dp))
                     OutlinedTextField(
                         shape = shape,
-                        value = patientSurName,
+                        value = surname,
                         onValueChange = {
-                            patientSurName = it
+                            surname = it
+                            viewModel.updateUiState(detailsState.copy(surname = it))
                         },
                         label = { Text("Surname") },
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = spacerModifier)
+                Box(
+                    modifier = Modifier
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .border(width = 1.dp, color = Color.Gray, shape = shape)
+                            .fillMaxWidth(),
+                        value = gender,
+                        onValueChange = { },
+                        readOnly = true,
+                        placeholder = {
+                            Text(text = "Gender")
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            unfocusedIndicatorColor = Color.White
+                        ),
+                        trailingIcon = {
+                            Icon(Icons.Default.KeyboardArrowDown,
+                                contentDescription = null,
+                                modifier = Modifier.clickable { appearGender = true })
+                        },
+                    )
+                    DropdownMenu(
+                        expanded = appearGender,
+                        onDismissRequest = { appearGender = false },
+                        modifier = Modifier.width(280.dp)
+                    ) {
+                        Gender.entries.map {
+                            DropdownMenuItem(text = {
+                                Text(text = it.value)
+                            }, onClick = {
+                                gender = it.value
+                                genderEnum = it
+                                viewModel.updateUiState(detailsState.copy(gender = it))
+                                appearGender = false
+                            }, modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = spacerModifier)
+                Box(
+                    modifier = Modifier
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .border(width = 1.dp, color = Color.Gray, shape = shape)
+                            .fillMaxWidth(),
+                        value = status,
+
+                        onValueChange = { },
+                        readOnly = true,
+                        placeholder = {
+                            Text(text = "Status")
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            unfocusedIndicatorColor = Color.White
+                        ),
+                        trailingIcon = {
+                            Icon(Icons.Default.KeyboardArrowDown,
+                                contentDescription = null,
+                                modifier = Modifier.clickable { appearStatus = true })
+                        },
+                    )
+                    DropdownMenu(
+                        expanded = appearStatus,
+                        onDismissRequest = { appearStatus = false },
+                        modifier = Modifier.width(280.dp)
+                    ) {
+                        PatientStatus.entries.map {
+                            DropdownMenuItem(text = {
+                                Text(text = it.value)
+                            }, onClick = {
+                                status = it.value
+                                statusEnum = it
+                                viewModel.updateUiState(detailsState.copy(status = it))
+                                appearStatus = false
+                            }, modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = spacerModifier)
                 OutlinedTextField(
                     shape = shape,
                     value = phoneNumber,
                     onValueChange = {
                         phoneNumber = it
+                        viewModel.updateUiState(detailsState.copy(phoneNumber = it))
                     },
                     label = { Text("Phone Number") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = spacerModifier)
                 OutlinedTextField(
                     shape = shape,
                     value = email,
                     onValueChange = {
                         email = it
+                        viewModel.updateUiState(detailsState.copy(email = it))
                     },
+                    isError = checkEmail,
                     label = { Text("Email") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
                 )
 
-                var openCalendar by remember { mutableStateOf(false) }
-                val state = rememberDatePickerState()
-
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = spacerModifier)
 
                 OutlinedTextField(
                     shape = shape,
@@ -302,10 +418,11 @@ fun PatientDialog(onDismiss: () -> Unit) {
                             Button(onClick = {
                                 openCalendar = false
                                 val dateString =
-                                    SimpleDateFormat("yyyy-MM-dd").format(state.selectedDateMillis)
+                                    SimpleDateFormat("yyyy-MM-dd").format(timeState.selectedDateMillis)
                                 val selectedDate = LocalDate.parse(dateString)
                                 DOB =
                                     "${selectedDate.year}-${selectedDate.month}-${selectedDate.dayOfMonth}"
+                                viewModel.updateUiState(detailsState.copy(DOB = DOB))
                             }
 
                             ) {
@@ -313,17 +430,18 @@ fun PatientDialog(onDismiss: () -> Unit) {
                             }
                         }) {
                         DatePicker(
-                            state = state
+                            state = timeState
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = spacerModifier)
                 OutlinedTextField(
                     shape = shape,
                     value = description,
                     onValueChange = {
                         description = it
+                        viewModel.updateUiState(detailsState.copy(description = it))
                     },
                     label = { Text("Description") },
                     modifier = Modifier.fillMaxWidth(),
@@ -338,7 +456,17 @@ fun PatientDialog(onDismiss: () -> Unit) {
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = {
-                        onDismiss()
+                        checkEmail = !checkEmail(email)
+                        if (!checkEmail) {
+                            coroutineScope.launch {
+                                if (viewModel.checkPatient()) {
+                                    viewModel.addPatient()
+                                    onDismiss()
+                                } else {
+                                    checkEmail = true
+                                }
+                            }
+                        }
                     }) {
                         Text("Save")
                     }
@@ -388,5 +516,5 @@ fun PatientsScreenNavigationPreview(){
 @Preview
 @Composable
 fun PatientDialogPreview() {
-    PatientDialog {}
+    //PatientDialog {}
 }

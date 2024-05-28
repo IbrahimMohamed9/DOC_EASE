@@ -56,6 +56,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -233,10 +234,6 @@ fun ScheduleDialog(onDismiss: () -> Unit) {
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Enter Details")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
                 var patientId: Int by remember { mutableStateOf(0) }
                 var patientIdText by remember { mutableStateOf("") }
                 var patientIdError by remember { mutableStateOf(false) }
@@ -251,6 +248,23 @@ fun ScheduleDialog(onDismiss: () -> Unit) {
                 )
                 val shape = RoundedCornerShape(10.dp)
 
+                Text(text = "Enter Details", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+
+                Spacer(modifier = Modifier.height(10.dp))
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = patientIdText,
+                    onValueChange = {
+                        patientIdText = it
+                        patientId = patientIdText.toIntOrNull() ?: 0
+                    },
+                    shape = shape,
+                    label = { Text("Patient ID") },
+                    keyboardOptions = keyboardOptions,
+                    isError = patientIdError
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
                 Box(
                     modifier = Modifier
                 ) {
@@ -292,20 +306,6 @@ fun ScheduleDialog(onDismiss: () -> Unit) {
                         }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = patientIdText,
-                    onValueChange = {
-                        patientIdText = it
-                        patientId = patientIdText.toIntOrNull() ?: 0
-                    },
-                    shape = shape,
-                    label = { Text("Patient ID") },
-                    keyboardOptions = keyboardOptions,
-                    isError = patientIdError
-                )
 
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(

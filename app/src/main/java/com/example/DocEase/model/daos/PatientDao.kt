@@ -25,4 +25,7 @@ interface PatientDao {
 
     @Query("SELECT * FROM patients")
     fun getPatients(): Flow<List<Patients>>
+
+    @Query("SELECT * FROM patients WHERE email = :email")
+    fun checkPatient(email: String):Flow<Patients>
 }

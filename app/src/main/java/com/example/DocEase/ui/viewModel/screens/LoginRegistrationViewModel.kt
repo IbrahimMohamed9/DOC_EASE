@@ -1,6 +1,7 @@
 package com.example.DocEase.ui.viewModel.screens
 
-import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
+@RequiresApi(Build.VERSION_CODES.O)
 class LoginRegistrationViewModel(
     private val doctorRepository:
     DoctorRepository
@@ -47,7 +49,7 @@ class LoginRegistrationViewModel(
             .firstOrNull() == null
     }
 
-    suspend fun getDoctorByEmail(): Flow<Doctors?> {
+    fun getDoctorByEmail(): Flow<Doctors?> {
         return doctorRepository.getEmailDoctor(doctorsUiState.doctorsDetails.email)
     }
 

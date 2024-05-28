@@ -15,7 +15,6 @@ object PatientList {
             "1234567890",
             "john.doe@example.com",
             "Patient with mild symptoms.",
-            "Male",
             Gender.MALE, PatientStatus.STABLE,
         ),
         Patients(
@@ -27,7 +26,6 @@ object PatientList {
             "9876543210",
             "jane.smith@example.com",
             "Patient recovering from surgery.",
-            "Female",
             Gender.MALE, PatientStatus.OBSERVATION,
         ),
         Patients(
@@ -39,7 +37,6 @@ object PatientList {
             "4561237890",
             "robert.brown@example.com",
             "Patient with chronic illness.",
-            "Male",
             Gender.MALE, PatientStatus.CRITICAL,
         ),
         Patients(
@@ -51,7 +48,6 @@ object PatientList {
             "7890123456",
             "emily.jones@example.com",
             "Patient with high blood pressure.",
-            "Female",
             Gender.MALE, PatientStatus.OBSERVATION,
         ),
         Patients(
@@ -63,7 +59,6 @@ object PatientList {
             "3216549870",
             "michael.davis@example.com",
             "Patient with diabetes.",
-            "Male",
             Gender.MALE, PatientStatus.STABLE,
         ),
         Patients(
@@ -75,7 +70,6 @@ object PatientList {
             "6549873210",
             "sarah.wilson@example.com",
             "Patient with allergy symptoms.",
-            "Female",
             Gender.MALE, PatientStatus.STABLE,
         ),
         Patients(
@@ -87,7 +81,6 @@ object PatientList {
             "7418529630",
             "david.martinez@example.com",
             "Patient with heart condition.",
-            "Male",
             Gender.MALE, PatientStatus.CRITICAL,
         ),
         Patients(
@@ -99,7 +92,6 @@ object PatientList {
             "8529637410",
             "laura.anderson@example.com",
             "Patient undergoing therapy.",
-            "Female",
             Gender.MALE, PatientStatus.OBSERVATION,
         ),
         Patients(
@@ -111,7 +103,6 @@ object PatientList {
             "9632587410",
             "james.taylor@example.com",
             "Patient with respiratory issues.",
-            "Male",
             Gender.MALE, PatientStatus.CRITICAL,
         ),
         Patients(
@@ -123,7 +114,6 @@ object PatientList {
             "3698521470",
             "sophia.thomas@example.com",
             "Patient with minor injuries.",
-            "Female",
             Gender.MALE, PatientStatus.STABLE,
         )
     )

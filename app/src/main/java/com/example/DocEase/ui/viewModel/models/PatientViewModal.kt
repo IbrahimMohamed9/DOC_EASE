@@ -16,7 +16,6 @@ data class PatientsDetails(
     val DOB: String = "", //date of birth
     val phoneNumber: String = "",
     val email: String = "",
-    val password: String = "",
     val gender: Gender = Gender.FEMALE,
     val description: String = "",
     val status: PatientStatus = PatientStatus.STABLE
@@ -40,7 +39,6 @@ fun PatientsDetails.toPatients(): Patients = Patients(
     gender = gender,
     description = description,
     status = status,
-    password = password
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -55,7 +53,6 @@ fun Patients.toPatientsDetails() = PatientsDetails(
     email = email,
     description = description,
     status = status,
-    password = password
 )
 
 @RequiresApi(Build.VERSION_CODES.O)

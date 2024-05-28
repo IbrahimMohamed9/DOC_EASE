@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.DocEase.DocEaseApplication
 import com.example.DocEase.ui.viewModel.screens.DoctorViewModal
 import com.example.DocEase.ui.viewModel.screens.LoginRegistrationViewModel
+import com.example.DocEase.ui.viewModel.screens.PatientViewModel
 
 object AppViewModelProvider {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -22,6 +23,12 @@ object AppViewModelProvider {
         initializer {
             DoctorViewModal(
                 DocEaseApplication().container.doctorRepository,
+                this.createSavedStateHandle()
+            )
+        }
+        initializer {
+            PatientViewModel(
+                DocEaseApplication().container.patientRepository,
                 this.createSavedStateHandle()
             )
         }

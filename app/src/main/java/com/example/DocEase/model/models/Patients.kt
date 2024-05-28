@@ -16,7 +16,6 @@ data class Patients(
     @ColumnInfo(name = "DOB") val DOB: String, //date of birth
     @ColumnInfo(name = "phoneNumber") val phoneNumber: String,
     @ColumnInfo(name = "email") val email: String,
-    @ColumnInfo(name = "password") val password: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "gender") val gender: Gender,
     @ColumnInfo(name = "status") val status: PatientStatus

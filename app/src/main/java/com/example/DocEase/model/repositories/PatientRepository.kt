@@ -13,5 +13,7 @@ class PatientRepository(private val patientDao: PatientDao):BaseRepository<Patie
 
     override fun getOneStream(id: Int): Flow<Patients?> = patientDao.getPatient(id)
 
+    fun checkPatient(email: String):Flow<Patients> = patientDao.checkPatient(email)
+
     override fun getAll(): Flow<List<Patients>> = patientDao.getPatients()
 }
