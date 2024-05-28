@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -50,6 +50,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -70,14 +71,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
-import com.example.DocEase.model.PatientList
 import com.example.DocEase.model.enums.PatientStatus
 import com.example.DocEase.model.models.Gender
 import com.example.DocEase.model.models.Patients
 import com.example.DocEase.ui.screen.navigation.DocBottomNavBar
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
 import com.example.DocEase.ui.viewModel.AppViewModelProvider
-import com.example.DocEase.ui.viewModel.screens.PatientViewModel
+import com.example.DocEase.ui.viewModel.screens.PatientsViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -105,7 +105,12 @@ fun PatientsScreenNavigation(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PatientsScreen(navigateToPatient: (Int) -> Unit) {
+fun PatientsScreen(
+    navigateToPatient: (Int) -> Unit,
+    viewModel: PatientsViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val PatientsUiStates by viewModel.PatientsUiStates.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -113,15 +118,15 @@ fun PatientsScreen(navigateToPatient: (Int) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn {
-            itemsIndexed(PatientList.patientList) { index, patient ->
-                PatientCard(patient = patient, index = index, navigateToPatient)
+            items(PatientsUiStates.patientList) { patient ->
+                PatientCard(patient = patient, navigateToPatient)
             }
         }
     }
 }
 
 @Composable
-fun PatientCard(patient: Patients, index: Int, onClick: (Int) -> Unit) {
+fun PatientCard(patient: Patients, onClick: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .padding(5.dp)
@@ -135,7 +140,12 @@ fun PatientCard(patient: Patients, index: Int, onClick: (Int) -> Unit) {
             modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 5.dp, end = 10.dp)
         ) {
             Image(
-                painter = painterResource(id = getPatientImage(patient.gender.value, index)),
+                painter = painterResource(
+                    id = getPatientImage(
+                        patient.gender.value,
+                        patient.patientId
+                    )
+                ),
                 contentDescription = "schedule image",
                 modifier = Modifier
                     .size(100.dp)
@@ -151,7 +161,12 @@ fun PatientCard(patient: Patients, index: Int, onClick: (Int) -> Unit) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column {
-                        Text(text = patient.name + " " + patient.surname, fontSize = 18.sp)
+                        Text(
+                            text = patient.name + " " + patient.surname,
+                            fontSize = 18.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
 
                         Text(text = patient.email, fontSize = 13.sp)
 
@@ -175,7 +190,7 @@ fun PatientCard(patient: Patients, index: Int, onClick: (Int) -> Unit) {
                     val color = when (patient.status) {
                         PatientStatus.STABLE -> Color.Green
                         PatientStatus.OBSERVATION -> Color.Yellow
-                        PatientStatus.CRITICAL -> Color.Yellow
+                        PatientStatus.CRITICAL -> Color.Red
                     }
                     Box(
                         modifier = Modifier
@@ -216,7 +231,7 @@ fun FloatingActionButton() {
 @Composable
 fun PatientDialog(
     onDismiss: () -> Unit,
-    viewModel: PatientViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: PatientsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
@@ -501,7 +516,7 @@ fun getPatientImage(gender: String, index: Int): Int {
 @Preview(showBackground = true)
 @Composable
 fun PatientsScreenPreview() {
-    PatientsScreen {}
+    PatientsScreen({})
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -516,5 +531,5 @@ fun PatientsScreenNavigationPreview(){
 @Preview
 @Composable
 fun PatientDialogPreview() {
-    //PatientDialog {}
+    PatientDialog({})
 }

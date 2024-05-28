@@ -11,6 +11,7 @@ import com.example.DocEase.DocEaseApplication
 import com.example.DocEase.ui.viewModel.screens.DoctorViewModal
 import com.example.DocEase.ui.viewModel.screens.LoginRegistrationViewModel
 import com.example.DocEase.ui.viewModel.screens.PatientViewModel
+import com.example.DocEase.ui.viewModel.screens.PatientsViewModel
 
 object AppViewModelProvider {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -30,6 +31,11 @@ object AppViewModelProvider {
             PatientViewModel(
                 DocEaseApplication().container.patientRepository,
                 this.createSavedStateHandle()
+            )
+        }
+        initializer {
+            PatientsViewModel(
+                DocEaseApplication().container.patientRepository
             )
         }
     }
