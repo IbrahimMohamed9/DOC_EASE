@@ -3,8 +3,10 @@ package com.example.DocEase.ui.screen
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -57,7 +59,6 @@ import com.example.DocEase.ui.screen.navigation.DocBottomNavBar
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
 import com.example.DocEase.ui.screen.navigation.TopAppBar
 import com.example.DocEase.ui.viewModel.AppViewModelProvider
-import com.example.DocEase.ui.viewModel.screens.PatientViewModel
 import com.example.DocEase.ui.viewModel.screens.ScheduleViewModel
 import kotlinx.coroutines.launch
 
@@ -69,6 +70,7 @@ object ScheduleDestination : NavigationDestination {
     val routeWithArgs = "$route/{$scheduleIdArg}"
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ScheduleScreenNavigation(
@@ -90,6 +92,7 @@ fun ScheduleScreenNavigation(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScheduleScreen(
     viewModel: ScheduleViewModel = viewModel(factory = AppViewModelProvider.Factory),
@@ -335,12 +338,14 @@ fun ScheduleScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ScheduleScreenPreview() {
     ScheduleScreen()
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ScheduleScreenNavigationPreview() {
