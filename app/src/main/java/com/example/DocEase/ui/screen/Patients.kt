@@ -266,7 +266,7 @@ fun PatientDialog(
                 val shape = RoundedCornerShape(10.dp)
                 val spacerModifier = Modifier.height(8.dp)
 
-                Text(text = "Enter Details", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = "Enter Patient Details", fontWeight = FontWeight.Bold, fontSize = 20.sp)
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
@@ -436,7 +436,7 @@ fun PatientDialog(
                                     SimpleDateFormat("yyyy-MM-dd").format(timeState.selectedDateMillis)
                                 val selectedDate = LocalDate.parse(dateString)
                                 DOB =
-                                    "${selectedDate.year}-${selectedDate.month}-${selectedDate.dayOfMonth}"
+                                    "${selectedDate.dayOfMonth}-${selectedDate.monthValue}-${selectedDate.year}"
                                 viewModel.updateUiState(detailsState.copy(DOB = DOB))
                             }
 

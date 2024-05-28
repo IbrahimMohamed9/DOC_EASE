@@ -41,7 +41,8 @@ object AppViewModelProvider {
         }
         initializer {
             SchedulesViewModel(
-                DocEaseApplication().container.scheduleRepository
+                DocEaseApplication().container.scheduleRepository,
+                DocEaseApplication().container.patientRepository
             )
         }
     }

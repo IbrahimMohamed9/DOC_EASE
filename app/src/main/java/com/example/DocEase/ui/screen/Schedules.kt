@@ -77,6 +77,8 @@ import com.example.DocEase.ui.viewModel.screens.SchedulesViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.Date
+import java.util.Locale
 
 object SchedulesDestination : NavigationDestination {
     override val route = "schedule"
@@ -153,7 +155,12 @@ fun SchedulesScreen(
         }
         Divider(modifier = Modifier.padding(15.dp))
         if (showDate) {
-            val dateString = SimpleDateFormat("yyyy-MM-dd").format(state.selectedDateMillis)
+            val dateString = state.selectedDateMillis?.let {
+                Date(
+                    it
+                )
+            }?.let { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it) }
+
             val selectedDate = LocalDate.parse(dateString)
             sheduleDate =
                 "${selectedDate.month} ${selectedDate.dayOfMonth}, ${selectedDate.year} Schedules"
@@ -174,8 +181,16 @@ fun SchedulesScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ScheduleCard(schedule: Schedules, navigateToSchedule: (Int) -> Unit) {
+fun ScheduleCard(
+    schedule: Schedules,
+    navigateToSchedule: (Int) -> Unit,
+    viewModel: SchedulesViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    viewModel.getPatient(schedule.patientId)
+    val patient = viewModel.patientsUiState.patientsDetails
+
     Card(
         modifier = Modifier
             .padding(5.dp)
@@ -198,7 +213,7 @@ fun ScheduleCard(schedule: Schedules, navigateToSchedule: (Int) -> Unit) {
             )
             Spacer(modifier = Modifier.width(20.dp))
             Column {
-                Text(text = "schedule patientName", fontSize = 18.sp)
+                Text(text = "${patient.name} ${patient.surname}", fontSize = 18.sp)
                 Text(text = schedule.disease.value, fontSize = 13.sp)
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
@@ -277,7 +292,11 @@ fun ScheduleDialog(
                 )
                 val shape = RoundedCornerShape(10.dp)
 
-                Text(text = "Enter Details", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(
+                    text = "Enter Schedule Details",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
 
                 Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
@@ -286,6 +305,7 @@ fun ScheduleDialog(
                     onValueChange = {
                         patientIdText = it
                         patientId = patientIdText.toIntOrNull() ?: 0
+                        viewModel.updateUiState(detailsState.copy(patientId = patientId))
                     },
                     shape = shape,
                     label = { Text("Patient ID") },
@@ -330,6 +350,7 @@ fun ScheduleDialog(
                             }, onClick = {
                                 dropDownItem = it.value
                                 expandedItems = false
+                                viewModel.updateUiState(detailsState.copy(disease = it))
                             }, modifier = Modifier.fillMaxSize()
                             )
                         }
@@ -382,6 +403,7 @@ fun ScheduleDialog(
                     value = price.toString(),
                     onValueChange = {
                         price = it.toIntOrNull() ?: 0
+                        viewModel.updateUiState(detailsState.copy(price = price))
                     },
                     label = { Text("Price") },
                     modifier = Modifier.fillMaxWidth(),
@@ -394,6 +416,7 @@ fun ScheduleDialog(
                     value = description,
                     onValueChange = {
                         description = it
+                        viewModel.updateUiState(detailsState.copy(description = description))
                     },
                     label = { Text("Description") },
                     modifier = Modifier.fillMaxWidth(),
@@ -412,9 +435,14 @@ fun ScheduleDialog(
                             patientIdError = true
                         } else {
                             coroutineScope.launch {
-                                viewModel.addSchedule()
+                                //To insure the patientId is existing in the patients table
+                                if (viewModel.checkPatientID(detailsState.patientId)) {
+                                    viewModel.addSchedule()
+                                    onDismiss()
+                                }
                             }
-                            onDismiss()
+                            //if not existing we will show error in patientId field
+                            patientIdError = true
                         }
                     }) {
                         Text("Save")
