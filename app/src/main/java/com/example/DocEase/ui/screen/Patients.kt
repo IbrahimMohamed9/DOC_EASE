@@ -492,8 +492,8 @@ fun PatientDialog(
 }
 
 
-fun getPatientImage(gender: String, index: Int): Int {
-    val newIndex = index % 4
+fun getPatientImage(gender: String, Id: Int): Int {
+    val newIndex = Id % 4
     if (gender == "Male") {
         return when (newIndex) {
             0 -> R.drawable.man_person_people_avatar_icon_230017

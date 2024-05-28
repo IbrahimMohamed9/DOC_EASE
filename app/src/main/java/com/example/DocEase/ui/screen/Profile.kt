@@ -289,9 +289,7 @@ fun ProfileImage(gender: Gender) {
 @Composable
 fun Field(title: String, content: String) {
     Column {
-        Text(
-            fontSize = 23.sp, fontWeight = FontWeight.Bold, text = title
-        )
+        FieldLabel(title)
         Spacer(modifier = Modifier.height(5.dp))
         Row(
             modifier = Modifier
@@ -313,6 +311,15 @@ fun Field(title: String, content: String) {
             )
         }
     }
+}
+
+@Composable
+fun FieldLabel(title: String) {
+    Text(
+        fontSize = 23.sp,
+        fontWeight = FontWeight.Bold,
+        text = title
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
