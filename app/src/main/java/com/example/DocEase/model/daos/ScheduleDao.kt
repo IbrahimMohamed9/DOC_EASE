@@ -25,5 +25,8 @@ interface ScheduleDao {
 
     @Query("SELECT * FROM schedules")
     fun getSchedules(): Flow<List<Schedules>>
+
+    @Query("SELECT * FROM schedules WHERE date = :date")
+    fun getSchedulesByDate(date: String): Flow<List<Schedules>>
 }
 

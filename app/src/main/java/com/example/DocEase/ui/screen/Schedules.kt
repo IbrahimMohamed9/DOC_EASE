@@ -35,6 +35,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -46,9 +47,11 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,12 +66,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
 import com.example.DocEase.model.enums.Disease
 import com.example.DocEase.model.models.Schedules
-import com.example.DocEase.model.ScheduleList
 import com.example.DocEase.ui.screen.navigation.DocBottomNavBar
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
+import com.example.DocEase.ui.viewModel.AppViewModelProvider
+import com.example.DocEase.ui.viewModel.screens.SchedulesViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 
@@ -101,13 +107,19 @@ fun SchedulesScreenNavigation(
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SchedulesScreen(navigateToSchedule: (Int) -> Unit) {
+fun SchedulesScreen(
+    navigateToSchedule: (Int) -> Unit,
+    viewModel: SchedulesViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     val tomorrow = LocalDate.now().plusDays(1)
     val state = rememberDatePickerState()
     var openCalendar by remember { mutableStateOf(false) }
     var showDate by remember { mutableStateOf(false) }
     var sheduleDate by remember { mutableStateOf("${tomorrow.month} ${tomorrow.dayOfMonth}, ${tomorrow.year} Schedules") }
+    var sheduleDateSearch by remember { mutableStateOf("${tomorrow.dayOfMonth}-${tomorrow.monthValue}-${tomorrow.year}") }
 
+    val TodaySchedulesUiStates by viewModel.TodaySchedulesUiStates.collectAsState()
+    val SchedulesByDateUiStates by viewModel.getSchedulesByDate(sheduleDateSearch).collectAsState()
 
     Column(
         modifier = Modifier
@@ -135,7 +147,7 @@ fun SchedulesScreen(navigateToSchedule: (Int) -> Unit) {
 
         Text(text = "Today Schedules", fontSize = 20.sp, modifier = Modifier.align(Alignment.Start))
         LazyRow {
-            items(ScheduleList.scheduleList) { schedule ->
+            items(TodaySchedulesUiStates.scheduleList) { schedule ->
                 ScheduleCard(schedule = schedule, navigateToSchedule)
             }
         }
@@ -145,6 +157,8 @@ fun SchedulesScreen(navigateToSchedule: (Int) -> Unit) {
             val selectedDate = LocalDate.parse(dateString)
             sheduleDate =
                 "${selectedDate.month} ${selectedDate.dayOfMonth}, ${selectedDate.year} Schedules"
+            sheduleDateSearch =
+                "${selectedDate.dayOfMonth}-${selectedDate.monthValue}-${selectedDate.year}"
         }
 
         Text(
@@ -153,7 +167,7 @@ fun SchedulesScreen(navigateToSchedule: (Int) -> Unit) {
 
 
         LazyColumn {
-            items(ScheduleList.scheduleList) { schedule ->
+            items(SchedulesByDateUiStates.scheduleList) { schedule ->
                 ScheduleCard(schedule = schedule, navigateToSchedule)
             }
         }
@@ -206,6 +220,7 @@ fun ScheduleCard(schedule: Schedules, navigateToSchedule: (Int) -> Unit) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FloatingActionButtonFun() {
     var showDialog by remember { mutableStateOf(false) }
@@ -223,8 +238,13 @@ fun FloatingActionButtonFun() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ScheduleDialog(onDismiss: () -> Unit) {
+fun ScheduleDialog(
+    onDismiss: () -> Unit,
+    viewModel: SchedulesViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -241,6 +261,15 @@ fun ScheduleDialog(onDismiss: () -> Unit) {
                 var description by remember { mutableStateOf("") }
                 var dropDownItem by remember { mutableStateOf("") }
                 var expandedItems by remember { mutableStateOf(false) }
+
+                val tomorrow = LocalDate.now().plusDays(1)
+                var date by remember { mutableStateOf("${tomorrow.dayOfMonth}-${tomorrow.monthValue}-${tomorrow.year}") }
+                var openCalendar by remember { mutableStateOf(false) }
+                val timeState = rememberDatePickerState()
+
+                val coroutineScope = rememberCoroutineScope()
+                val uiState = viewModel.schedulesUiState
+                val detailsState = uiState.schedulesDetails
 
                 //design values
                 val keyboardOptions = KeyboardOptions.Default.copy(
@@ -310,6 +339,46 @@ fun ScheduleDialog(onDismiss: () -> Unit) {
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     shape = shape,
+                    value = date,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Date Of Schedule") },
+                    modifier = Modifier.fillMaxWidth(),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { openCalendar = true }) {
+                            Icon(Icons.Default.DateRange, contentDescription = "Select Date")
+                        }
+                    },
+
+                    )
+                if (openCalendar) {
+                    DatePickerDialog(
+                        onDismissRequest = { openCalendar = false },
+                        confirmButton = {
+                            Button(onClick = {
+                                openCalendar = false
+                                val dateString =
+                                    SimpleDateFormat("yyyy-MM-dd").format(timeState.selectedDateMillis)
+                                val selectedDate = LocalDate.parse(dateString)
+                                date =
+                                    "${selectedDate.dayOfMonth}-${selectedDate.monthValue}-${selectedDate.year}"
+                                viewModel.updateUiState(detailsState.copy(date = date))
+                            }
+
+                            ) {
+                                Text(text = "Confirm")
+                            }
+                        }) {
+                        DatePicker(
+                            state = timeState
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    shape = shape,
                     value = price.toString(),
                     onValueChange = {
                         price = it.toIntOrNull() ?: 0
@@ -342,7 +411,9 @@ fun ScheduleDialog(onDismiss: () -> Unit) {
                         if (patientIdText.toIntOrNull() == null) {
                             patientIdError = true
                         } else {
-                            patientIdError = false
+                            coroutineScope.launch {
+                                viewModel.addSchedule()
+                            }
                             onDismiss()
                         }
                     }) {
@@ -371,7 +442,7 @@ fun getScheduleImage(disease: Disease): Int {
 @Preview(showBackground = true)
 @Composable
 fun SchedulesScreenPreview() {
-    SchedulesScreen {}
+    SchedulesScreen({})
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -385,6 +456,5 @@ fun SchedulesScreenNavigationPreview() {
 @Preview(showBackground = true)
 @Composable
 fun ScheduleDialogPreview() {
-
-    ScheduleDialog({ })
+    ScheduleDialog({})
 }

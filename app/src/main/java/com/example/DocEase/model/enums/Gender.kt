@@ -1,4 +1,4 @@
-package com.example.DocEase.model.models
+package com.example.DocEase.model.enums
 
 enum class Gender(val value:String) {
     MALE("Male"),

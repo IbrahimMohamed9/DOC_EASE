@@ -14,4 +14,5 @@ class ScheduleRepository(private val scheduleDao: ScheduleDao):BaseRepository<Sc
     override fun getOneStream(id: Int): Flow<Schedules?> = scheduleDao.getSchedule(id)
 
     override fun getAll(): Flow<List<Schedules>> = scheduleDao.getSchedules()
+    fun getSchedulesByDate(date: String): Flow<List<Schedules>> = scheduleDao.getSchedulesByDate(date)
 }

@@ -3,6 +3,7 @@ package com.example.DocEase.model.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.DocEase.model.enums.Gender
 import com.example.DocEase.model.enums.MedicalSpecialization
 
 @Entity(tableName = "doctors")

@@ -72,7 +72,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
 import com.example.DocEase.model.enums.PatientStatus
-import com.example.DocEase.model.models.Gender
+import com.example.DocEase.model.enums.Gender
 import com.example.DocEase.model.models.Patients
 import com.example.DocEase.ui.screen.navigation.DocBottomNavBar
 import com.example.DocEase.ui.screen.navigation.NavigationDestination

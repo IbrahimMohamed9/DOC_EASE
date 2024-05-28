@@ -3,7 +3,7 @@ package com.example.DocEase.ui.viewModel.models
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.DocEase.model.enums.PatientStatus
-import com.example.DocEase.model.models.Gender
+import com.example.DocEase.model.enums.Gender
 import com.example.DocEase.model.models.Patients
 import java.time.LocalDate
 

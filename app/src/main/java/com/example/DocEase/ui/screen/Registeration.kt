@@ -61,7 +61,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
 import com.example.DocEase.model.enums.MedicalSpecialization
-import com.example.DocEase.model.models.Gender
+import com.example.DocEase.model.enums.Gender
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
 import com.example.DocEase.ui.viewModel.AppViewModelProvider
 import com.example.DocEase.ui.viewModel.screens.LoginRegistrationViewModel

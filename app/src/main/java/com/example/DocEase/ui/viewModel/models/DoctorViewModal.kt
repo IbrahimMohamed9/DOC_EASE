@@ -4,7 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.DocEase.model.enums.MedicalSpecialization
 import com.example.DocEase.model.models.Doctors
-import com.example.DocEase.model.models.Gender
+import com.example.DocEase.model.enums.Gender
 import java.time.LocalDate
 
 
