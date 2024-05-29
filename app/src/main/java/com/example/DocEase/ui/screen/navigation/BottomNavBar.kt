@@ -20,9 +20,9 @@ import com.example.DocEase.R
 
 @Composable
 fun DocBottomNavBar(
-    navigateToProfile: ()->Unit,
-    navigateToSchedules: ()->Unit,
-    navigateToPatients: ()->Unit
+    navigateToProfile: () -> Unit,
+    navigateToSchedules: () -> Unit,
+    navigateToPatients: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -42,7 +42,7 @@ fun DocBottomNavBar(
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = {navigateToSchedules() }) {
+            IconButton(onClick = { navigateToSchedules() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.daily_schedule_icon),
                     contentDescription = "schedule Icon",
@@ -52,7 +52,7 @@ fun DocBottomNavBar(
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = {navigateToPatients() }) {
+            IconButton(onClick = { navigateToPatients() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.patient_hospital_stretcher_icon),
                     contentDescription = "patients Icon",
@@ -68,5 +68,5 @@ fun DocBottomNavBar(
 @Preview(showBackground = true)
 @Composable
 fun DocBottomNavBarPreview() {
-    DocBottomNavBar({},{},{})
+    DocBottomNavBar({}, {}, {})
 }

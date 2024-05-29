@@ -117,16 +117,17 @@ fun SchedulesScreen(
     val state = rememberDatePickerState()
     var openCalendar by remember { mutableStateOf(false) }
     var showDate by remember { mutableStateOf(false) }
-    var sheduleDate by remember { mutableStateOf("${tomorrow.month} ${tomorrow.dayOfMonth}, ${tomorrow.year} Schedules") }
-    var sheduleDateSearch by remember { mutableStateOf("${tomorrow.dayOfMonth}-${tomorrow.monthValue}-${tomorrow.year}") }
+    var scheduleDate by remember { mutableStateOf("${tomorrow.month} ${tomorrow.dayOfMonth}, ${tomorrow.year} Schedules") }
+    var scheduleDateSearch by remember { mutableStateOf("${tomorrow.dayOfMonth}-${tomorrow.monthValue}-${tomorrow.year}") }
 
-    val TodaySchedulesUiStates by viewModel.TodaySchedulesUiStates.collectAsState()
-    val SchedulesByDateUiStates by viewModel.getSchedulesByDate(sheduleDateSearch).collectAsState()
+    val todaySchedulesUiStates by viewModel.TodaySchedulesUiStates.collectAsState()
+    val schedulesByDateUiStates by viewModel.getSchedulesByDate(scheduleDateSearch).collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp),
+            .padding(10.dp)
+            .padding(bottom = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(Icons.Default.DateRange,
@@ -149,7 +150,7 @@ fun SchedulesScreen(
 
         Text(text = "Today Schedules", fontSize = 20.sp, modifier = Modifier.align(Alignment.Start))
         LazyRow {
-            items(TodaySchedulesUiStates.scheduleList) { schedule ->
+            items(todaySchedulesUiStates.scheduleList) { schedule ->
                 ScheduleCard(schedule = schedule, navigateToSchedule)
             }
         }
@@ -162,19 +163,19 @@ fun SchedulesScreen(
             }?.let { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it) }
 
             val selectedDate = LocalDate.parse(dateString)
-            sheduleDate =
+            scheduleDate =
                 "${selectedDate.month} ${selectedDate.dayOfMonth}, ${selectedDate.year} Schedules"
-            sheduleDateSearch =
+            scheduleDateSearch =
                 "${selectedDate.dayOfMonth}-${selectedDate.monthValue}-${selectedDate.year}"
         }
 
         Text(
-            text = sheduleDate, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start)
+            text = scheduleDate, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start)
         )
 
 
         LazyColumn {
-            items(SchedulesByDateUiStates.scheduleList) { schedule ->
+            items(schedulesByDateUiStates.scheduleList) { schedule ->
                 ScheduleCard(schedule = schedule, navigateToSchedule)
             }
         }

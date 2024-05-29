@@ -33,14 +33,18 @@ fun DocNavHost(
         composable(route = LoginDestination.route) {
             LoginScreenNavigation(
                 navigateToRegister = { navController.navigate(RegistrationDestination.route) },
-                navigateToProfilePage = { navController.navigate("${ProfileDestination.route}/${it}"); doctorId = it }
+                navigateToProfilePage = {
+                    navController.navigate("${ProfileDestination.route}/${it}"); doctorId = it
+                }
             )
         }
 
         composable(route = RegistrationDestination.route) {
             RegistrationScreenNavigation(
                 navigateToLogin = { navController.navigate(LoginDestination.route) },
-                navigateToProfilePage = { navController.navigate("${ProfileDestination.route}/${it}"); doctorId = it }
+                navigateToProfilePage = {
+                    navController.navigate("${ProfileDestination.route}/${it}"); doctorId = it
+                }
             )
         }
 
@@ -95,7 +99,7 @@ fun DocNavHost(
         composable(route = SchedulesDestination.route) {
             SchedulesScreenNavigation(
                 navigateToProfile = { navController.navigate("${ProfileDestination.route}/${doctorId}") },
-                navigateToPatients = {navController.navigate(PatientsDestination.route)},
+                navigateToPatients = { navController.navigate(PatientsDestination.route) },
                 navigateToSchedule = { navController.navigate("${ScheduleDestination.route}/${it}") },
             )
         }

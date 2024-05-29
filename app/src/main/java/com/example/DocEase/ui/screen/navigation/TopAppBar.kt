@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 fun TopAppBar(
     titleScreen: String,
     navigateBack: () -> Unit
-){
+) {
     CenterAlignedTopAppBar(
         title = { Text(titleScreen) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
@@ -32,6 +32,6 @@ fun TopAppBar(
 
 @Preview(showBackground = true)
 @Composable
-fun TopAppBarPreview(){
+fun TopAppBarPreview() {
     TopAppBar(titleScreen = "test", {})
 }

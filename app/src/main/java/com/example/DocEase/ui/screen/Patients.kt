@@ -71,8 +71,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
-import com.example.DocEase.model.enums.PatientStatus
 import com.example.DocEase.model.enums.Gender
+import com.example.DocEase.model.enums.PatientStatus
 import com.example.DocEase.model.models.Patients
 import com.example.DocEase.ui.screen.navigation.DocBottomNavBar
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
@@ -114,7 +114,8 @@ fun PatientsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp),
+            .padding(10.dp)
+            .padding(bottom = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn {
