@@ -115,21 +115,19 @@ fun PatientScreen(
     val DOB = detailsState.DOB
     val phoneNumber = detailsState.phoneNumber
 
-    //TODO ask prof naida about this bug enum did not display will
     Log.d("details", detailsState.toString())
-    var dropDownItem by remember { mutableStateOf(detailsState.status.value) }
     var description by remember { mutableStateOf(detailsState.description) }
     var expandedItems by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val id = detailsState.patientId
 
-    //TODO ask prof naida about this bug fix image border in top
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
+            .padding(top = 65.dp, bottom = 45.dp)
+            .fillMaxHeight()
             .wrapContentSize()
             .verticalScroll(rememberScrollState())
     ) {
@@ -153,7 +151,7 @@ fun PatientScreen(
                 modifier = Modifier
                     .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
                     .fillMaxWidth(0.75f),
-                value = dropDownItem,
+                value = detailsState.status.value,
 
                 onValueChange = { },
                 readOnly = true,
@@ -184,7 +182,6 @@ fun PatientScreen(
                     DropdownMenuItem(text = {
                         Text(text = it.value)
                     }, onClick = {
-                        dropDownItem = it.value
                         expandedItems = false
                         viewModel.updateUiState(detailsState.copy(status = it))
                         coroutineScope.launch {
@@ -241,6 +238,7 @@ fun PatientScreen(
         Spacer(modifier = Modifier.size(height = 20.dp, width = 0.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .padding(bottom = 10.dp)
             .clickable {
                 val number = Uri.parse("tel:$phoneNumber")
                 val i = Intent(Intent.ACTION_DIAL, number)
@@ -294,6 +292,7 @@ fun PatientImage(gender: String, ID: Int) {
                 contentScale = contentScale,
                 modifier = Modifier
                     .size(imageSize)
+                    .padding(top = 10.dp)
                     .border(
                         BorderStroke(5.dp, colorsBrush), CircleShape
                     )

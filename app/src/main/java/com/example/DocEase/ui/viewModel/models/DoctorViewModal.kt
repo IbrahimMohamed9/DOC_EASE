@@ -8,7 +8,6 @@ import com.example.DocEase.model.enums.Gender
 import java.time.LocalDate
 
 
-//TODO make fix email and password
 @RequiresApi(Build.VERSION_CODES.O)
 data class DoctorsDetails constructor(
     val doctorId: Int = 0,
@@ -17,10 +16,10 @@ data class DoctorsDetails constructor(
     val DOJ: String = "${LocalDate.now().dayOfMonth}-${LocalDate.now().monthValue}-${LocalDate.now().year}", //date of join
     val DOB: String = "", //date of birth
     val phoneNumber: String = "",
-    val email: String = "Ibrahemmohamedb@gmail.comfg",
+    val email: String = "",
     val gender: Gender = Gender.FEMALE,
     val medicalSpecialization: MedicalSpecialization = MedicalSpecialization.CARDIOLOGY,
-    val password: String = "123",
+    val password: String = "",
 )
 
 @RequiresApi(Build.VERSION_CODES.O)

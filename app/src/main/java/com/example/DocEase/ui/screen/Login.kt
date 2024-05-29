@@ -80,9 +80,8 @@ fun LoginScreen(
         AppViewModelProvider.Factory
     )
 ) {
-    //TODO fix email and password
-    var email by remember { mutableStateOf("Ibrahemmohamedb@gmail.comfg") }
-    var password by remember { mutableStateOf("123") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     var showPassword by remember { mutableStateOf(false) }
     var checkEmail by remember { mutableStateOf(false) }

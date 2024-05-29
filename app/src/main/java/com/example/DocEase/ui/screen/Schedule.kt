@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -111,26 +112,16 @@ fun ScheduleScreen(
     val email = patientState.email
     val phoneNumber = patientState.phoneNumber
 
-    //TODO ask prof naida about this bug enum did not display will
-    Log.d("details", patientState.toString())
-
-    var patientStatusItem by remember { mutableStateOf(patientState.status.value) }
-    var diseaseItem by remember { mutableStateOf(scheduleState.disease.value) }
-
-    var scheduleDescription by remember { mutableStateOf(scheduleState.description) }
-    var patientDescription by remember { mutableStateOf(patientState.description) }
-
     var expandedPatientStatus by remember { mutableStateOf(false) }
     var expandedDisease by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    //TODO ask prof naida about this bug fix image border in top
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
+            .padding(top = 65.dp, bottom = 45.dp)
             .wrapContentSize()
             .verticalScroll(rememberScrollState())
     ) {
@@ -139,6 +130,7 @@ fun ScheduleScreen(
             contentDescription = "schedule image",
             modifier = Modifier
                 .size(100.dp)
+                .padding(top = 10.dp)
                 .clip(RoundedCornerShape(7.dp)),
             contentScale = ContentScale.Crop
         )
@@ -158,8 +150,7 @@ fun ScheduleScreen(
                 modifier = Modifier
                     .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
                     .fillMaxWidth(0.75f),
-                value = patientStatusItem,
-
+                value = patientState.status.value,
                 onValueChange = { },
                 readOnly = true,
                 placeholder = {
@@ -189,7 +180,6 @@ fun ScheduleScreen(
                     DropdownMenuItem(text = {
                         Text(text = it.value)
                     }, onClick = {
-                        patientStatusItem = it.value
                         expandedPatientStatus = false
                         viewModel.updateUiState(patientState.copy(status = it))
                         coroutineScope.launch {
@@ -207,7 +197,7 @@ fun ScheduleScreen(
                 modifier = Modifier
                     .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
                     .fillMaxWidth(0.75f),
-                value = diseaseItem,
+                value = scheduleState.disease.value,
 
                 onValueChange = { },
                 readOnly = true,
@@ -238,7 +228,6 @@ fun ScheduleScreen(
                     DropdownMenuItem(text = {
                         Text(text = it.value)
                     }, onClick = {
-                        diseaseItem = it.value
                         expandedDisease = false
                         viewModel.updateUiState(scheduleState.copy(disease = it))
                         coroutineScope.launch {
@@ -257,9 +246,8 @@ fun ScheduleScreen(
                 modifier = Modifier
                     .fillMaxWidth(0.75f),
                 shape = RoundedCornerShape(10.dp),
-                value = scheduleDescription,
+                value = scheduleState.description,
                 onValueChange = {
-                    scheduleDescription = it
                     viewModel.updateUiState(scheduleState.copy(description = it))
                     coroutineScope.launch {
                         viewModel.updateSchedule()
@@ -276,10 +264,8 @@ fun ScheduleScreen(
                 modifier = Modifier
                     .fillMaxWidth(0.75f),
                 shape = RoundedCornerShape(10.dp),
-                value = patientDescription,
+                value = patientState.description,
                 onValueChange = {
-                    //TODO ask prof Naida about why did not update the db
-                    patientDescription = it
                     viewModel.updateUiState(patientState.copy(description = it))
                     coroutineScope.launch {
                         viewModel.updatePatient()
@@ -314,9 +300,7 @@ fun ScheduleScreen(
             Text(text = email)
         }
 
-
         Spacer(modifier = Modifier.size(height = 20.dp, width = 0.dp))
-
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
             .clickable {
                 val number = Uri.parse("tel:$phoneNumber")
@@ -329,6 +313,7 @@ fun ScheduleScreen(
                         .show()
                 }
             }
+            .padding(bottom = 10.dp)
             .align(Alignment.Start)) {
             Icon(Icons.Default.Phone, contentDescription = null, modifier = Modifier.size(40.dp))
             Spacer(modifier = Modifier.size(width = 20.dp, height = 0.dp))

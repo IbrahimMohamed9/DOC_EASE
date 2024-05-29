@@ -1,6 +1,7 @@
 package com.example.DocEase.ui.viewModel.screens
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,7 +9,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.DocEase.model.models.Schedules
 import com.example.DocEase.model.repositories.PatientRepository
 import com.example.DocEase.model.repositories.ScheduleRepository
 import com.example.DocEase.ui.screen.ScheduleDestination
@@ -20,10 +20,8 @@ import com.example.DocEase.ui.viewModel.models.toPatientUiState
 import com.example.DocEase.ui.viewModel.models.toPatients
 import com.example.DocEase.ui.viewModel.models.toScheduleUiState
 import com.example.DocEase.ui.viewModel.models.toSchedules
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)

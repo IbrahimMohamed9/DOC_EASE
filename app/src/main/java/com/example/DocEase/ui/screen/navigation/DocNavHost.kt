@@ -29,7 +29,6 @@ fun DocNavHost(
     navController: NavHostController
 ) {
     var doctorId = 0
-    // TODO ensure this is login
     NavHost(navController = navController, startDestination = LoginDestination.route) {
         composable(route = LoginDestination.route) {
             LoginScreenNavigation(

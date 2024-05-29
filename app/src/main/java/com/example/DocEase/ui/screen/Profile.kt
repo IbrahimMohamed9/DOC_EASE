@@ -61,8 +61,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.DocEase.R
-import com.example.DocEase.model.enums.MedicalSpecialization
 import com.example.DocEase.model.enums.Gender
+import com.example.DocEase.model.enums.MedicalSpecialization
 import com.example.DocEase.ui.screen.navigation.DocBottomNavBar
 import com.example.DocEase.ui.screen.navigation.NavigationDestination
 import com.example.DocEase.ui.viewModel.AppViewModelProvider
@@ -105,9 +105,6 @@ fun ProfileScreen(
     val DOB = detailsState.DOB
     val phoneNumber = detailsState.phoneNumber
 
-    //TODO ask prof naida about this bug
-    Log.d("details", detailsState.toString())
-    var dropDownItem by remember { mutableStateOf(detailsState.medicalSpecialization.value) }
     var expandedItems by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val id = detailsState.doctorId
@@ -118,6 +115,7 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .wrapContentSize()
+            .padding(bottom = 45.dp)
             .verticalScroll(rememberScrollState())
     ) {
         ProfileImage(detailsState.gender)
@@ -140,7 +138,7 @@ fun ProfileScreen(
                 modifier = Modifier
                     .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
                     .fillMaxWidth(0.75f),
-                value = dropDownItem,
+                value = detailsState.medicalSpecialization.value,
 
                 onValueChange = {  },
                 readOnly = true,
@@ -170,7 +168,6 @@ fun ProfileScreen(
                     DropdownMenuItem(text = {
                         Text(text = it.value)
                     }, onClick = {
-                        dropDownItem = it.value
                         expandedItems = false
                         viewModel.updateUiState(detailsState.copy(medicalSpecialization = it))
                         coroutineScope.launch {
@@ -212,6 +209,7 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.size(height = 20.dp, width = 0.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .padding(bottom = 10.dp)
             .clickable {
                 val number = Uri.parse("tel:$phoneNumber")
                 val i = Intent(Intent.ACTION_DIAL, number)
@@ -269,6 +267,7 @@ fun ProfileImage(gender: Gender) {
                     contentScale = contentScale,
                     modifier = Modifier
                         .size(imageSize)
+                        .padding(top = 10.dp)
                         .border(
                             BorderStroke(5.dp, colorsBrush), CircleShape
                         )
