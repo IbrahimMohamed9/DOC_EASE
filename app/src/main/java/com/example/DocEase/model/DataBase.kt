@@ -12,7 +12,7 @@ import com.example.DocEase.model.models.Patients
 import com.example.DocEase.model.models.Schedules
 
 @Database(entities = [Doctors::class, Patients::class, Schedules::class], version = 1, exportSchema = false)
-abstract class StudentDatabase: RoomDatabase() {
+abstract class DocEaseDatabase: RoomDatabase() {
     abstract fun doctorDao(): DoctorDao
     abstract fun patientDao(): PatientDao
     abstract fun scheduleDao(): ScheduleDao
@@ -20,13 +20,13 @@ abstract class StudentDatabase: RoomDatabase() {
 
     companion object{
         @Volatile
-        private var Instance: StudentDatabase? = null
+        private var Instance: DocEaseDatabase? = null
 
 
-        fun getDatabase(context: Context): StudentDatabase {
+        fun getDatabase(context: Context): DocEaseDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, StudentDatabase::class.java, "DocsysDatabase")
+                Room.databaseBuilder(context, DocEaseDatabase::class.java, "DocsysDatabase")
                     .build().also { Instance = it }
             }
         }
