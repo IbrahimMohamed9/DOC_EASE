@@ -13,14 +13,14 @@ interface AppContainer {
 
 class AppDataContainer(private val context: Context) : AppContainer {
     override val doctorRepository: DoctorRepository by lazy {
-        DoctorRepository(StudentDatabase.getDatabase(context).doctorDao())
+        DoctorRepository(DocEaseDatabase.getDatabase(context).doctorDao())
     }
 
     override val patientRepository: PatientRepository by lazy {
-        PatientRepository(StudentDatabase.getDatabase(context).patientDao())
+        PatientRepository(DocEaseDatabase.getDatabase(context).patientDao())
     }
 
     override val scheduleRepository: ScheduleRepository by lazy {
-        ScheduleRepository(StudentDatabase.getDatabase(context).scheduleDao())
+        ScheduleRepository(DocEaseDatabase.getDatabase(context).scheduleDao())
     }
 }
